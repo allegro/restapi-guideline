@@ -1,0 +1,16 @@
+site_name: Allegro REST API Design Guidelines
+theme: readthedocs
+docs_dir: ./
+
+pages:
+- index: 'index.md'
+- All in one: 'README.md'
+- Design Guidelines: 'DesignGuidelines.md'
+- Section:
+    - 'Resource': 'Resource.md'
+    - 'Representation': 'Representation.md'
+    - 'Error': 'Error.md'
+- Command pattern: 'CommandPattern.md'
+- Documentation: 'Documentation.md'
+- Glossary: 'Glossary.md'
+- HATEOAS: 'Hateoas.md'
