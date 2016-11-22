@@ -9,6 +9,7 @@
 	* [Value representation](#value-representation)
 	* [Translations](#translations)
 * [Price and currency](#price-and-currency)
+* [High precision numbers](#high-precision-numbers)
 * [Enum values](#enum-values)
 * [Nesting foreign resources relations](#nesting-foreign-resources-relations)
 * [Provide full resources where available](#provide-full-resources-where-available)
@@ -194,16 +195,16 @@ curl https://allegroapi.io/contests?totalAmount.amount=11.25&totalAmount.currenc
 
 Many libraries and languages don't deserialize your JSON numeric fields with high precision in mind and are hard to
 customize (JavaScripts **eval** method for eq.). Because of this limitation you should serialize numeric fields that
-require much care when handling to a string which follow these rules:
+require much care when handling to a string which follows these rules:
 
-  * if the decimal separator is used then it must be a **dot (.)**,
-  * at least one digit must be present before a decimal separator,
-  * no other separators can be used,
-  * the exponent field cannot be used,
-  * non numerical values like "NaN" inside the string are not allowed,
-  * don't use more digits after the decimal separator then you actually need.
+  * if the decimal separator is used then it must be a **dot (.)**
+  * at least one digit must be present before a decimal separator
+  * no other separators can be used
+  * the exponent field cannot be used
+  * non numerical values like "NaN" inside the string are not allowed
+  * don't use more digits after the decimal separator then you actually need
 
-Some `amount` which follow the above rules examples:
+Some `amount` field examples which follow the above rules:
 
 * "0"
 * "0.01"
