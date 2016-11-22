@@ -181,20 +181,7 @@ fields as proposed by [paypal](https://developer.paypal.com/docs/api/#common-obj
 ```
 
 * `currency` - 3 letter currency code as defined in [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217#Active_codes)
-* `amount` - string representation, at least one digit before a decimal separator **without the thousands separator**,
-then **dot (.)** as a decimal separator, then **at most** two digits after the decimal separator.
-
-Such a method of presenting `amount` makes the interpretation easier, provides with precision and protects against rounding errors.
-
-Some `amount` examples:
-
-* "0.00"
-* "0.01"
-* "1.00"
-* "1.10"
-* "11.25"
-* "1234567.25"
-* "9999999.99"
+* `amount` - string representation which follows the rules for high precission numbers described in the next chapter
 
 If you want to submit price `amount` and `currency` as a response to the GET request, you should use:
 
@@ -202,6 +189,29 @@ If you want to submit price `amount` and `currency` as a response to the GET req
 curl https://allegroapi.io/contests?totalAmount.amount=11.25&totalAmount.currency=PLN  \
     -H "Accept: application/vnd.allegro.public.v1+json"
 ```
+
+## High precision numbers
+
+Many libraries and languages don't deserialize your JSON numeric fields with high precision in mind and are hard to
+customize (JavaScripts **eval** method for eq.). Because of this limitation you should serialize numeric fields that
+require much care when handling to a string which follow these rules:
+
+  * if the decimal separator is used then it must be a **dot (.)**,
+  * at least one digit must be present before a decimal separator,
+  * no other separators can be used,
+  * the exponent field cannot be used,
+  * non numerical values like "NaN" inside the string are not allowed,
+  * don't use more digits after the decimal separator then you actually need.
+
+Some `amount` which follow the above rules examples:
+
+* "0"
+* "0.01"
+* "1"
+* "1.1"
+* "11.25"
+* "1234567.25"
+* "9999999.999"
 
 ## Enum values
 
