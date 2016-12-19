@@ -87,7 +87,7 @@ Example of an unknown value or state:
 
 ## Empty collections
 
-If you want to return empty collection, return `[]` instead of `null`. Some client frameworks cannot iterate over `null` and need extra null checking.  Iterion over `[]` is always possible. e.g.:
+If you want to return empty collection, return `[]` instead of `null`. Some client frameworks cannot iterate over `null` and need extra null checking.  Iteration over `[]` is always possible. e.g.:
 
 ```javascript
 {
