@@ -124,6 +124,7 @@ that add value to the API owner’s business.
 	* [Property name format](#property-name-format)
 	* [Provide resource (UU)IDs](#provide-resource-uuids)
 	* [Null values](#null-values)
+	* [Empty collections](#empty-collections)
 	* [Use UTC times formatted in ISO8601](#use-utc-times-formatted-in-iso8601)
 	* [Time without date](#time-without-date)
 	* [Country, language and translations](#country-language-and-translations)
@@ -628,6 +629,17 @@ Example of an unknown value or state:
         }
      ],
   // ...
+}
+```
+
+## Empty collections
+
+If you want to return empty collection, return `[]` instead of `null`. Some client frameworks cannot iterate over `null` and need extra null checking.  Iterion over `[]` is always possible. e.g.:
+
+```javascript
+{
+	"status": "OK",
+	"errors": []
 }
 ```
 
