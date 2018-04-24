@@ -733,7 +733,7 @@ and
 Accept-Language: pl-PL
 ````
 
-By sending the information presented above, you will inform the backing service that all user messages (including [errors](#error) messages) should be translated to English (as a default) and Polish.
+By sending the information presented above, you will inform the backing service that all user messages (including [error](#error) messages) should be translated to English or Polish, respectively. If "Accept-Language" header is omitted then default value is en-US.
 
 ## Price and currency
 
@@ -930,14 +930,14 @@ Sample response:
 }
 ```
 
-We also fully support ranges in our filtering. To use this feature you need to use one of these suffix's:
+To support ranges in filtering use virtual fields with suffixes :
 
 - **gt** - greater than
 - **lt** - less than
 - **gte** - greater or equal
 - **lte** - less or equal
 
-To do so, use a request such as:
+Example request: 
 
 ````bash
 curl -X GET https://api.allegro.pl/general-deliveries?rate.gt=200 -H "Accept: application/vnd.allegro.public.v1+json"
