@@ -224,7 +224,7 @@ have the API return the updated (or created) representation as part of the respo
 Sample request:
 
 ```bash
-curl -X POST https://allegroapi.io/users \
+curl -X POST https://api.allegro.pl/users \
     -H "Accept: application/vnd.allegro.public.v1+json" \
     -H "Content-Type: application/vnd.allegro.public.v1+json" \
     -d
@@ -239,7 +239,7 @@ curl -X POST https://allegroapi.io/users \
 Sample response:
 
 * status: `201 Created`
-* header `Location: https://allegroapi.io/users/01234567-89ab-cdef-0123-456789abcdef`
+* header `Location: https://api.allegro.pl/users/01234567-89ab-cdef-0123-456789abcdef`
 * header `Content-Type: application/vnd.allegro.public.v1+json`
 * whole entity is included in a body (additional fields such as `id`, `createdAt`, `updatedAt`)
 
@@ -264,7 +264,7 @@ Sample response:
 Sample request:
 
 ```bash
-curl https://allegroapi.io/users -H "Accept: application/vnd.allegro.public.v1+json"
+curl https://api.allegro.pl/users -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
 
@@ -276,7 +276,7 @@ curl https://allegroapi.io/users -H "Accept: application/vnd.allegro.public.v1+j
 Sample request:
 
 ```bash
-curl https://allegroapi.io/users/{id} -H "Accept: application/vnd.allegro.public.v1+json"
+curl https://api.allegro.pl/users/{id} -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
 
@@ -289,7 +289,7 @@ curl https://allegroapi.io/users/{id} -H "Accept: application/vnd.allegro.public
 Sample request:
 
 ```bash
-curl -X PUT https://allegroapi.io/users/01234567-89ab-cdef-0123-456789abcdef \
+curl -X PUT https://api.allegro.pl/users/01234567-89ab-cdef-0123-456789abcdef \
     -H "Accept: application/vnd.allegro.public.v1+json" \
     -H "Content-Type: application/vnd.allegro.public.v1+json" \
     -d
@@ -328,7 +328,7 @@ In the example above,  a nick name is changed to "Zed" and a middle name is left
 Sample request:
 
 ```bash
-curl -X DELETE https://allegroapi.io/users/{id}
+curl -X DELETE https://api.allegro.pl/users/{id}
 ```
 
 
@@ -375,7 +375,7 @@ as only backend service has updated knowledge about how to validate parameters.
 You can reuse an existing method for creating resources by giving information about dry-run in a query string, e.g.:
 
 ```bash
-curl -X POST https://allegroapi.io/users?dryRun=true  \
+curl -X POST https://api.allegro.pl/users?dryRun=true  \
     -d {"login": "userLogin", "password": "userPassword", "email": "user@allegro.pl"}
     -H "Content-type: application/vnd.allegro.public.v1+json"
     -H "Accept: application/vnd.allegro.public.v1+json"
@@ -411,7 +411,7 @@ Sample error validation response:
 Use `include` in query string to specify what parameters you want to validate, e.g. to validate only `login` and `password` fields, use `include=login&include=password`:
 
 ```bash
-curl -X POST https://allegroapi.io/users?dryRun=true&include=login&include=password  \
+curl -X POST https://api.allegro.pl/users?dryRun=true&include=login&include=password  \
     -d {"login": "userLogin", "password": "userPassword", "email": "user@allegro.pl"}
     -H "Content-type: application/vnd.allegro.public.v1+json"
     -H "Accept: application/vnd.allegro.public.v1+json"

@@ -9,7 +9,7 @@ and modifies lots of fields in the given offer causing business changes in many 
 How to model this type of a non-trivial operation in REST? It can be a change caused by updating the offers status as presented below:
 
 ```bash
-curl -X PUT https://allegroapi.io/offers/6546456 -H "Content-Type: application/vnd.allegro.public.v1+json" -d
+curl -X PUT https://api.allegro.pl/offers/6546456 -H "Content-Type: application/vnd.allegro.public.v1+json" -d
 {
     "status" : "RENEWED",
     // all other offer fields ...
@@ -19,7 +19,7 @@ curl -X PUT https://allegroapi.io/offers/6546456 -H "Content-Type: application/v
 or this way:
 
 ```bash
-curl -X PATCH https://allegroapi.io/offers/6546456 -H "Content-Type: application/vnd.allegro.public.v1+json" -d
+curl -X PATCH https://api.allegro.pl/offers/6546456 -H "Content-Type: application/vnd.allegro.public.v1+json" -d
 [
     {
         "op" : "replace",
@@ -53,7 +53,7 @@ But do not use `POST` to do it as `POST` is not idempotent in REST – use the `
 ### Adding the command
 
 ```bash
-curl -X PUT https://allegroapi.io/offers/6546456/activate-copy-commands/c544880a-028c-4d8f-a76d-264e1ed51cd1 -H "Content-Type: application/vnd.allegro.public.v1+json" -d
+curl -X PUT https://api.allegro.pl/offers/6546456/activate-copy-commands/c544880a-028c-4d8f-a76d-264e1ed51cd1 -H "Content-Type: application/vnd.allegro.public.v1+json" -d
 {
     "input" : {
         "startingAt" : "2015-08-30T17:00:00.000Z",
@@ -92,7 +92,7 @@ however the business logic will be executed only once.
 ### Checking execution status (optionally)
 
 ```bash
-curl -X GET https://allegroapi.io/offers/6546456/activate-copy-commands/c544880a-028c-4d8f-a76d-264e1ed51cd1 -H "Accept: application/vnd.allegro.public.v1+json"
+curl -X GET https://api.allegro.pl/offers/6546456/activate-copy-commands/c544880a-028c-4d8f-a76d-264e1ed51cd1 -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
 Response:

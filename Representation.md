@@ -173,11 +173,21 @@ represented in JSON, query params, etc. Translating user messages for the client
 The HTTP standard defines an appropriate header for that: `Accept-Language` [RFC 2616, 14.4](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4).
 If the client desires to receive localized user messages in the response, it should set the `Accept-Language` header in its request.
 
+This is required to handle at least two types of "Accept-Language" :
+
 ```
-Accept-Language: ru-UA
+Accept-Language: en-* (* is any valid type eg. "GB", "US")
+
 ```
 
-By sending the information presented above, you will inform the backing service that all user messages (including [errors](#error) messages) should be translated to Russian used in eastern Ukraine.
+and
+
+```
+Accept-Language: pl-PL
+
+```
+
+By sending the information presented above, you will inform the backing service that all user messages (including [errors](#error) messages) should be translated to English (as a default) and Polish.
 
 ## Price and currency
 
@@ -199,7 +209,7 @@ fields as proposed by [paypal](https://developer.paypal.com/docs/api/#common-obj
 If you want to submit price `amount` and `currency` as a response to the GET request, you should use:
 
 ```bash
-curl https://allegroapi.io/contests?totalAmount.amount=11.25&totalAmount.currency=PLN  \
+curl https://api.allegro.pl/contests?totalAmount.amount=11.25&totalAmount.currency=PLN  \
     -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
@@ -309,7 +319,7 @@ instead of or in addition to form-encoded data. This creates symmetry
 with JSON response bodies, e.g.:
 
 ```bash
-curl -X POST https://allegroapi.io/users \
+curl -X POST https://api.allegro.pl/users \
     -H "Content-Type: application/vnd.allegro.public.v1+json" \
     -d '{"name": "user-name"}'
 ```
@@ -356,7 +366,7 @@ For example, when submitting a request for a list of general delivery points to 
 To do so, use a request such as:
 
 ```bash
-curl -X GET https://allegroapi.io/general-deliveries?name=UP+Poznań+41&address.city=Poznań -H "Accept: application/vnd.allegro.public.v1+json"
+curl -X GET https://api.allegro.pl/general-deliveries?name=UP+Poznań+41&address.city=Poznań -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
 Here, `name` and `address.city` are fields that support filtering.
@@ -384,13 +394,26 @@ Sample response:
 }
 ```
 
+We also fully support ranges in our filtering. To use this feature you need to use one of these suffix's:
+
+- **gt** - greater than
+- **lt** - less than
+- **gte** - greater or equal
+- **lte** - less or equal
+
+To do so, use a request such as:
+
+```bash
+curl -X GET https://api.allegro.pl/general-deliveries?rate.gt=200 -H "Accept: application/vnd.allegro.public.v1+json"
+```
 
 ### Filter by multiple values in one filed
+
 If you want to filter many values in one field, you should repeat the field name many times in URL adding different values, e.g.
 to filter shipping payments in `PRE` and `POST` values use:
 
 ```bash
-curl -X GET https://allegroapi.io/general-deliveries?shipments.payments=PRE&shipments.payments=POST -H "Accept: application/vnd.allegro.public.v1+json"
+curl -X GET https://api.allegro.pl/general-deliveries?shipments.payments=PRE&shipments.payments=POST -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
 This type of convention, i.e. `shipments.payments=PRE&shipments.payments=POST` is supported by many frameworks out of the box.
@@ -472,7 +495,7 @@ with `value` `Doładowanie` and parameters of `id` `ab98c5ec-f9c6-440f-9af0-a19c
 you can submit a request for `/product-searches`:
 
 ```bash
-curl -X POST https://allegroapi.io/product-searches -H "Accept: application/vnd.allegro.public.v1+json" -d
+curl -X POST https://api.allegro.pl/product-searches -H "Accept: application/vnd.allegro.public.v1+json" -d
 {
     "limit": 100,
     "offset": 150,
@@ -504,7 +527,7 @@ It will improve the process of mapping from one search data version to another i
 In return, you get an id for the created "search" (in `Location` header, status `HTTP 201 Created`), which holds your search results. To view them, provide:
 
 ```bash
-curl -X GET https://allegroapi.io/product-searches/4be770c3-4967-6805-8f13-0457dc8ed446 -H "Accept: application/vnd.allegro.public.v1+json"
+curl -X GET https://api.allegro.pl/product-searches/4be770c3-4967-6805-8f13-0457dc8ed446 -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
 Important note:  There is no way to override filters for a given id - you must create a new search resource.
@@ -513,7 +536,7 @@ Important note:  There is no way to override filters for a given id - you must c
 Use `search.id` parameter to get filtered collection of entities with a sort parameter such as:
 
 ```bash
-curl -X GET https://allegroapi.io/products?search.id=4be770c3-4967-6805-8f13-0457dc8ed446&sort=-parameterGroups.name -H "Accept: application/vnd.allegro.public.v1+json"
+curl -X GET https://api.allegro.pl/products?search.id=4be770c3-4967-6805-8f13-0457dc8ed446&sort=-parameterGroups.name -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
 ## Sorting

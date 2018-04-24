@@ -15,7 +15,7 @@ We publish this document in order to:
 * help you to understand the principles behind our REST API design if you are a developer/administrator
 who wants to interact with the API provided by Allegro Public REST API or micro-services,
 * ensure consistency between your service and the Allegro REST API if you are developing a service consuming a REST API,
-* hear your feedback (http://developer.allegroapi.io/kontakt/).
+* hear your feedback (http://developer.allegro.pl/contact/).
 
 
 ## Allegro REST API
