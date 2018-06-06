@@ -79,7 +79,7 @@ Sample response:
     },
     "output" : {
         "status" : "VALIDATED_AND_RUNNING",
-        "errors" : null,
+        "errors" : [],
         "newOffer" : null
     }
 }
@@ -108,7 +108,7 @@ Response:
     },
     "output" : {
         "status" : "SUCCESSFUL",
-        "errors" : null,
+        "errors" : [],
         "newOffer" : {
             "id" : "607445543"
         }
