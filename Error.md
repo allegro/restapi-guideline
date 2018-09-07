@@ -30,7 +30,7 @@ HTTP/1.1 422 Unprocessable Entity
 	    {
 	        "message": "Delivery point data not passed",
 	        "code": "MissingDeliveryPointException",
-	        "details": "Exception was thrown from https://allegroapi.io/points/1 in line 2",
+	        "details": "Exception was thrown from https://api.allegro.pl/points/1 in line 2",
 	        "path": "Endpoint.getDeliveries.arg1",
 	        "userMessage": "Nie wybrano punktu dla odbioru osobistego"
 	    }

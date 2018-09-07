@@ -34,7 +34,8 @@ where it should tell how many entities matched the clients criteria, NOT how man
 * **address**
 * **street**
 * **city**
-* **zipCode**
+* **province**
+* **postCode**
 * **countryCode**
 
 ## Image

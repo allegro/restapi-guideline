@@ -369,7 +369,7 @@ have the API return the updated (or created) representation as part of the respo
 Sample request:
 
 ```bash
-curl -X POST https://allegroapi.io/users \
+curl -X POST https://api.allegro.pl/users \
     -H "Accept: application/vnd.allegro.public.v1+json" \
     -H "Content-Type: application/vnd.allegro.public.v1+json" \
     -d
@@ -384,7 +384,7 @@ curl -X POST https://allegroapi.io/users \
 Sample response:
 
 * status: `201 Created`
-* header `Location: https://allegroapi.io/users/01234567-89ab-cdef-0123-456789abcdef`
+* header `Location: https://api.allegro.pl/users/01234567-89ab-cdef-0123-456789abcdef`
 * header `Content-Type: application/vnd.allegro.public.v1+json`
 * whole entity is included in a body (additional fields such as `id`, `createdAt`, `updatedAt`)
 
@@ -409,7 +409,7 @@ Sample response:
 Sample request:
 
 ```bash
-curl https://allegroapi.io/users -H "Accept: application/vnd.allegro.public.v1+json"
+curl https://api.allegro.pl/users -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
 
@@ -421,7 +421,7 @@ curl https://allegroapi.io/users -H "Accept: application/vnd.allegro.public.v1+j
 Sample request:
 
 ```bash
-curl https://allegroapi.io/users/{id} -H "Accept: application/vnd.allegro.public.v1+json"
+curl https://api.allegro.pl/users/{id} -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
 
@@ -434,7 +434,7 @@ curl https://allegroapi.io/users/{id} -H "Accept: application/vnd.allegro.public
 Sample request:
 
 ```bash
-curl -X PUT https://allegroapi.io/users/01234567-89ab-cdef-0123-456789abcdef \
+curl -X PUT https://api.allegro.pl/users/01234567-89ab-cdef-0123-456789abcdef \
     -H "Accept: application/vnd.allegro.public.v1+json" \
     -H "Content-Type: application/vnd.allegro.public.v1+json" \
     -d
@@ -473,7 +473,7 @@ In the example above,  a nick name is changed to "Zed" and a middle name is left
 Sample request:
 
 ```bash
-curl -X DELETE https://allegroapi.io/users/{id}
+curl -X DELETE https://api.allegro.pl/users/{id}
 ```
 
 
@@ -520,7 +520,7 @@ as only backend service has updated knowledge about how to validate parameters.
 You can reuse an existing method for creating resources by giving information about dry-run in a query string, e.g.:
 
 ```bash
-curl -X POST https://allegroapi.io/users?dryRun=true  \
+curl -X POST https://api.allegro.pl/users?dryRun=true  \
     -d {"login": "userLogin", "password": "userPassword", "email": "user@allegro.pl"}
     -H "Content-type: application/vnd.allegro.public.v1+json"
     -H "Accept: application/vnd.allegro.public.v1+json"
@@ -556,7 +556,7 @@ Sample error validation response:
 Use `include` in query string to specify what parameters you want to validate, e.g. to validate only `login` and `password` fields, use `include=login&include=password`:
 
 ```bash
-curl -X POST https://allegroapi.io/users?dryRun=true&include=login&include=password  \
+curl -X POST https://api.allegro.pl/users?dryRun=true&include=login&include=password  \
     -d {"login": "userLogin", "password": "userPassword", "email": "user@allegro.pl"}
     -H "Content-type: application/vnd.allegro.public.v1+json"
     -H "Accept: application/vnd.allegro.public.v1+json"
@@ -625,7 +625,8 @@ Example of an unknown value or state:
            "name":"Jaś Fasola",
            "street":"Zakręt 56",
            "postCode":"00-999",
-           "city":"Lądek Zdrój"
+           "city":"Lądek Zdrój",
+           "province":"Pomorskie"
         }
      ],
   // ...
@@ -697,7 +698,7 @@ Sample JSON with such a property:
 {
     "user" : {
         // ...
-        "prefferedLanguage": "ru-UA" // Russian used in eastern Ukraine
+        "prefferedLanguage": "en-GB" //  form of English in the UK, but also countries such as Canada
     }
 }
 ```
@@ -705,9 +706,9 @@ Sample JSON with such a property:
 Java sample for [Locale](https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html) supporting these formats:
 
 ```java
-Locale locale = Locale.forLanguageTag("ru-UA");
+Locale locale = Locale.forLanguageTag("en-GB");
 String countryCode = locale.getCountry();
-// countryCode == "UA"
+// countryCode == "GB"
 ```
 
 The above actually parses according to the [RFC 5646](http://tools.ietf.org/html/rfc5646) standard which is a backward
@@ -720,11 +721,19 @@ represented in JSON, query params, etc. Translating user messages for the client
 The HTTP standard defines an appropriate header for that: `Accept-Language` [RFC 2616, 14.4](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4).
 If the client desires to receive localized user messages in the response, it should set the `Accept-Language` header in its request.
 
-```
-Accept-Language: ru-UA
-```
+This is required to handle at least two types of "Accept-Language" :
 
-By sending the information presented above, you will inform the backing service that all user messages (including [errors](#error) messages) should be translated to Russian used in eastern Ukraine.
+````
+Accept-Language: en-* (* is any valid type eg. "GB", "US")
+````
+
+and
+
+````
+Accept-Language: pl-PL
+````
+
+By sending the information presented above, you will inform the backing service that all user messages (including [error](#error) messages) should be translated to English or Polish, respectively. If "Accept-Language" header is omitted then default value is en-US.
 
 ## Price and currency
 
@@ -759,7 +768,7 @@ Some `amount` examples:
 If you want to submit price `amount` and `currency` as a response to the GET request, you should use:
 
 ```bash
-curl https://allegroapi.io/contests?totalAmount.amount=11.25&totalAmount.currency=PLN  \
+curl https://api.allegro.pl/contests?totalAmount.amount=11.25&totalAmount.currency=PLN  \
     -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
@@ -846,7 +855,7 @@ instead of or in addition to form-encoded data. This creates symmetry
 with JSON response bodies, e.g.:
 
 ```bash
-curl -X POST https://allegroapi.io/users \
+curl -X POST https://api.allegro.pl/users \
     -H "Content-Type: application/vnd.allegro.public.v1+json" \
     -d '{"name": "user-name"}'
 ```
@@ -893,7 +902,7 @@ For example, when submitting a request for a list of general delivery points to 
 To do so, use a request such as:
 
 ```bash
-curl -X GET https://allegroapi.io/general-deliveries?name=UP+Poznań+41&address.city=Poznań -H "Accept: application/vnd.allegro.public.v1+json"
+curl -X GET https://api.allegro.pl/general-deliveries?name=UP+Poznań+41&address.city=Poznań -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
 Here, `name` and `address.city` are fields that support filtering.
@@ -921,13 +930,26 @@ Sample response:
 }
 ```
 
+To support ranges in filtering use virtual fields with suffixes :
+
+- **gt** - greater than
+- **lt** - less than
+- **gte** - greater or equal
+- **lte** - less or equal
+
+Example request: 
+
+````bash
+curl -X GET https://api.allegro.pl/general-deliveries?rate.gt=200 -H "Accept: application/vnd.allegro.public.v1+json"
+````
 
 ### Filter by multiple values in one filed
+
 If you want to filter many values in one field, you should repeat the field name many times in URL adding different values, e.g.
 to filter shipping payments in `PRE` and `POST` values use:
 
 ```bash
-curl -X GET https://allegroapi.io/general-deliveries?shipments.payments=PRE&shipments.payments=POST -H "Accept: application/vnd.allegro.public.v1+json"
+curl -X GET https://api.allegro.pl/general-deliveries?shipments.payments=PRE&shipments.payments=POST -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
 This type of convention, i.e. `shipments.payments=PRE&shipments.payments=POST` is supported by many frameworks out of the box.
@@ -1009,7 +1031,7 @@ with `value` `Doładowanie` and parameters of `id` `ab98c5ec-f9c6-440f-9af0-a19c
 you can submit a request for `/product-searches`:
 
 ```bash
-curl -X POST https://allegroapi.io/product-searches -H "Accept: application/vnd.allegro.public.v1+json" -d
+curl -X POST https://api.allegro.pl/product-searches -H "Accept: application/vnd.allegro.public.v1+json" -d
 {
     "limit": 100,
     "offset": 150,
@@ -1041,7 +1063,7 @@ It will improve the process of mapping from one search data version to another i
 In return, you get an id for the created "search" (in `Location` header, status `HTTP 201 Created`), which holds your search results. To view them, provide:
 
 ```bash
-curl -X GET https://allegroapi.io/product-searches/4be770c3-4967-6805-8f13-0457dc8ed446 -H "Accept: application/vnd.allegro.public.v1+json"
+curl -X GET https://api.allegro.pl/product-searches/4be770c3-4967-6805-8f13-0457dc8ed446 -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
 Important note:  There is no way to override filters for a given id - you must create a new search resource.
@@ -1050,7 +1072,7 @@ Important note:  There is no way to override filters for a given id - you must c
 Use `search.id` parameter to get filtered collection of entities with a sort parameter such as:
 
 ```bash
-curl -X GET https://allegroapi.io/products?search.id=4be770c3-4967-6805-8f13-0457dc8ed446&sort=-parameterGroups.name -H "Accept: application/vnd.allegro.public.v1+json"
+curl -X GET https://api.allegro.pl/products?search.id=4be770c3-4967-6805-8f13-0457dc8ed446&sort=-parameterGroups.name -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
 ## Sorting
@@ -1143,7 +1165,7 @@ HTTP/1.1 422 Unprocessable Entity
 	    {
 	        "message": "Delivery point data not passed",
 	        "code": "MissingDeliveryPointException",
-	        "details": "Exception was thrown from https://allegroapi.io/points/1 in line 2",
+	        "details": "Exception was thrown from https://api.allegro.pl/points/1 in line 2",
 	        "path": "Endpoint.getDeliveries.arg1",
 	        "userMessage": "Nie wybrano punktu dla odbioru osobistego."
 	    }
@@ -1174,7 +1196,7 @@ and modifies lots of fields in the given offer causing business changes in many 
 How to model this type of a non-trivial operation in REST? It can be a change caused by updating the offers status as presented below:
 
 ```bash
-curl -X PUT https://allegroapi.io/offers/6546456 -H "Content-Type: application/vnd.allegro.public.v1+json" -d
+curl -X PUT https://api.allegro.pl/offers/6546456 -H "Content-Type: application/vnd.allegro.public.v1+json" -d
 {
     "status" : "RENEWED",
     // all other offer fields ...
@@ -1184,7 +1206,7 @@ curl -X PUT https://allegroapi.io/offers/6546456 -H "Content-Type: application/v
 or this way:
 
 ```bash
-curl -X PATCH https://allegroapi.io/offers/6546456 -H "Content-Type: application/vnd.allegro.public.v1+json" -d
+curl -X PATCH https://api.allegro.pl/offers/6546456 -H "Content-Type: application/vnd.allegro.public.v1+json" -d
 [
     {
         "op" : "replace",
@@ -1218,7 +1240,7 @@ But do not use `POST` to do it as `POST` is not idempotent in REST – use the `
 ### Adding the command
 
 ```bash
-curl -X PUT https://allegroapi.io/offers/6546456/renew-commands/23453425-34253245-3453454-345345 -H "Content-Type: application/vnd.allegro.public.v1+json" -d
+curl -X PUT https://api.allegro.pl/offers/6546456/renew-commands/23453425-34253245-3453454-345345 -H "Content-Type: application/vnd.allegro.public.v1+json" -d
 {
     "fromDate" : "2015-08-30T17:00:00.000Z",
     "duration" : "P7D",
@@ -1248,7 +1270,7 @@ however the business logic will be executed only once.
 ### Checking execution status (optionally)
 
 ```bash
-curl -X GET https://allegroapi.io/offers/6546456/renew-commands/23453425-34253245-3453454-345345 -H "Accept: application/vnd.allegro.public.v1+json"
+curl -X GET https://api.allegro.pl/offers/6546456/renew-commands/23453425-34253245-3453454-345345 -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
 Response:
@@ -1325,7 +1347,8 @@ where it should tell how many entities matched the clients criteria, NOT how man
 * **address**
 * **street**
 * **city**
-* **zipCode**
+* **province**
+* **postCode**
 * **countryCode**
 
 ## Image
