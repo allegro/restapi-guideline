@@ -79,7 +79,7 @@ Responses also explicitly indicate their cache-ability.
 Clients deliver state via body contents, query-string parameters, request headers and the requested URI (the resource name).
 Services deliver state to clients via body content, response codes, and response headers.
 This is technically referred to as hypermedia (or hyperlinks within hypertext).
-Aside from the description above, HATEOS also means that, where necessary, links are contained in the returned body (or headers)
+Aside from the description above, HATEOAS also means that, where necessary, links are contained in the returned body (or headers)
 to supply the URI for retrieval of the object itself or related objects. We will talk about this in more detail later.
 
 If a service violates any of the required constraints, **it cannot be considered RESTful**.
