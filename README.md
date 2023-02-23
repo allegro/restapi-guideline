@@ -718,7 +718,7 @@ and
 Accept-Language: pl-PL
 ````
 
-By sending the information presented above, you will inform the backing service that all user messages (including [error](#error) messages) should be translated to English or Polish, respectively. If "Accept-Language" header is omitted then default value is en-US.
+By sending the information presented above, you will inform the backing service that all user messages (including [error](#error) messages) should be translated to English or Polish, respectively. If "Accept-Language" header is omitted or set to an unsupported value then the language should fallback to en-US.
 
 ## Price and currency
 
