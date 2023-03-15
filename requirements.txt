@@ -1,0 +1,13 @@
+# Pip Requirements File
+# https://pip.pypa.io/en/latest/user_guide/#requirements-files
+#
+# Usage:
+#     # Create and load the Python virtual environment
+#     python3 -m venv python_modules
+#     source python_modules/bin/activate
+#
+#     # Install packages
+#     python3 -m pip install --upgrade -r requirements.txt
+
+mkdocs==1.3.0
+mkdocs-exclude-search
