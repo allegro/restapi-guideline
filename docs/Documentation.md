@@ -5,3 +5,5 @@ of what given resource is responsible for and how a client interprets it. This d
 parameters (`GET`) or body (`POST`, `PUT`, `PATCH`), required and optional parameters, the response a client should
 expect and possible error codes. Documentation should be compatible with [swagger spec 2.0](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md)
 and should be accessible under a well-known endpoint (e.g. service-host/swagger.json).
+
+

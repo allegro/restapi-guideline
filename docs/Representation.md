@@ -1,29 +1,5 @@
 # Representation
 
-* [Property name format](#property-name-format)
-* [Provide resource (UU)IDs](#provide-resource-uuids)
-* [Null values](#null-values)
-* [Empty collections](#empty-collections)
-* [Use UTC times formatted in ISO8601](#use-utc-times-formatted-in-iso8601)
-* [Time without date](#time-without-date)
-* [Country, language and translations](#country,-language-and-translations)
-	* [Value representation](#value-representation)
-	* [Translations](#translations)
-* [Price and currency](#price-and-currency)
-* [High precision numbers](#high-precision-numbers)
-* [Enum values](#enum-values)
-* [Nesting foreign resources relations](#nesting-foreign-resources-relations)
-* [Provide full resources where available](#provide-full-resources-where-available)
-* [Accept JSON in request bodies](#accept-json-in-request-bodies)
-* [Keep JSON response minified](#keep-json-response-minified)
-* [Filtering](#filtering)
-	* [Simple filters in query string](#simple-filters-in-query-string)
-	* [Filter by multiple values in one filed](#filter-by-multiple-values-in-one-filed)
-	* [Advanced filtering (similar to search) concerning many parameters and nested structures](#advanced-filtering-similar-to-search-concerning-many-parameters-and-nested-structures)
-* [Sorting](#sorting)
-* [Wrap collection in object](#wrap-collection-in-object)
-* [Consistent paging scheme](#consistent-paging-scheme)
-* [Keep response gziped](#keep-response-gziped)
 
 ## Property name format
 
@@ -78,7 +54,8 @@ Example of an unknown value or state:
            "name":"Jaś Fasola",
            "street":"Zakręt 56",
            "postCode":"00-999",
-           "city":"Lądek Zdrój"
+           "city":"Lądek Zdrój",
+           "province":"Pomorskie"
         }
      ],
   // ...
@@ -150,7 +127,7 @@ Sample JSON with such a property:
 {
     "user" : {
         // ...
-        "prefferedLanguage": "ru-UA" // Russian used in eastern Ukraine
+        "prefferedLanguage": "en-GB" //  form of English in the UK, but also countries such as Canada
     }
 }
 ```
@@ -158,9 +135,9 @@ Sample JSON with such a property:
 Java sample for [Locale](https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html) supporting these formats:
 
 ```java
-Locale locale = Locale.forLanguageTag("ru-UA");
+Locale locale = Locale.forLanguageTag("en-GB");
 String countryCode = locale.getCountry();
-// countryCode == "UA"
+// countryCode == "GB"
 ```
 
 The above actually parses according to the [RFC 5646](http://tools.ietf.org/html/rfc5646) standard which is a backward
@@ -175,18 +152,17 @@ If the client desires to receive localized user messages in the response, it sho
 
 This is required to handle at least two types of "Accept-Language" :
 
-```
+````
 Accept-Language: en-* (* is any valid type eg. "GB", "US")
-
-```
+````
 
 and
 
-```
+````
 Accept-Language: pl-PL
-```
+````
 
-By sending the information presented above, you will inform the backing service that all user messages (including [error](#error) messages) should be translated to English or Polish, respectively. If "Accept-Language" header is omitted then default value is en-US.
+By sending the information presented above, you will inform the backing service that all user messages (including [error](#error) messages) should be translated to English or Polish, respectively. If "Accept-Language" header is omitted or set to an unsupported value then the language should fallback to en-US.
 
 ## Price and currency
 
@@ -203,7 +179,20 @@ fields as proposed by [paypal](https://developer.paypal.com/docs/api/#common-obj
 ```
 
 * `currency` - 3 letter currency code as defined in [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217#Active_codes)
-* `amount` - string representation which follows the rules for high precission numbers described in the next chapter
+* `amount` - string representation, at least one digit before a decimal separator **without the thousands separator**,
+then **dot (.)** as a decimal separator, then **at most** two digits after the decimal separator.
+
+Such a method of presenting `amount` makes the interpretation easier, provides with precision and protects against rounding errors.
+
+Some `amount` examples:
+
+* "0.00"
+* "0.01"
+* "1.00"
+* "1.10"
+* "11.25"
+* "1234567.25"
+* "9999999.99"
 
 If you want to submit price `amount` and `currency` as a response to the GET request, you should use:
 
@@ -211,29 +200,6 @@ If you want to submit price `amount` and `currency` as a response to the GET req
 curl https://api.allegro.pl/contests?totalAmount.amount=11.25&totalAmount.currency=PLN  \
     -H "Accept: application/vnd.allegro.public.v1+json"
 ```
-
-## High precision numbers
-
-Many libraries and languages don't deserialize your JSON numeric fields with high precision in mind and are hard to
-customize (JavaScripts **eval** method for eq.). Because of this limitation you should serialize numeric fields that
-require much care when handling to a string which follows these rules:
-
-  * if the decimal separator is used then it must be a **dot (.)**
-  * at least one digit must be present before a decimal separator
-  * no other separators can be used
-  * the exponent field cannot be used
-  * non numerical values like "NaN" inside the string are not allowed
-  * don't use more digits after the decimal separator then you actually need
-
-Some `amount` field examples which follow the above rules:
-
-* "0"
-* "0.01"
-* "1"
-* "1.1"
-* "11.25"
-* "1234567.25"
-* "9999999.999"
 
 ## Enum values
 
@@ -402,9 +368,9 @@ To support ranges in filtering use virtual fields with suffixes :
 
 Example request: 
 
-```bash
+````bash
 curl -X GET https://api.allegro.pl/general-deliveries?rate.gt=200 -H "Accept: application/vnd.allegro.public.v1+json"
-```
+````
 
 ### Filter by multiple values in one filed
 
@@ -598,3 +564,4 @@ GET /offers?offset=100&limit=500
 ## Keep response gziped
 
 All responses should be gziped based on the client `Accept-Encoding: gzip` header and return information about used encode method in the `Content-Encoding: gzip` header.
+

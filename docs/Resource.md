@@ -1,28 +1,5 @@
 # Resource
 
-* [Name](#name)
-* [Identification (UU)IDs](#identification-uuids)
-* [URLs for user's collections](#urls-for-users-collections)
-* [Lowercase paths](#lowercase-paths)
-* [Minimize resources nesting](#minimize-resources-nesting)
-* [Beta resources](#beta-resources)
-* [Versioning](#versioning)
-	* [Beta version](#beta-version)
-* [Views](#views)
-* [User Agent Header](#user-agent-header)
-	* [Identifying your client](#identifying-your-client)
-* [Use HTTP methods to operate on collections and entities](#use-http-methods-to-operate-on-collections-and-entities)
-	* [Update and create must return a resource representation](#update-and-create-must-return-a-resource-representation)
-	* [Create entity](#create-entity)
-	* [List entities (collection)](#list-entities-collection)
-	* [Get selected entity](#get-selected-entity)
-	* [Update entity](#update-entity)
-	* [Delete entity](#delete-entity)
-* [Return appropriate status codes](#return-appropriate-status-codes)
-* [Validate request parameters](#validate-request-parameters)
-	* [Validate errors](#validate-errors)
-	* [Validate selected fields](#validate-selected-fields)
-
 ## Name
 
 Use the plural version of a resource name to be consistent when referring to particular resources, e.g.:
@@ -47,20 +24,6 @@ Provide UUIDs as a lowercase string in `8-4-4-4-12` format, e.g.:
 ```
 01234567-89ab-cdef-0123-456789abcdef
 ```
-
-## URLs for user's collections
-
-If you want to return collections containing user's private data, always **add user-id to the URL** (in path or in query).
-
-E.g.:
-```
-\orders?seller.id={sellerId}
-\users\{userId}\watched-offers
-```
-Because watched offers for users A and B are different, these collections should have different URLs.
-
-GET responses can be cached on public proxies (varnish, ISP proxies).
-To prevent caching **return header: "Cache-Control: private"**
 
 ## Lowercase paths
 
@@ -422,3 +385,5 @@ Sample response:
 ```json
 Response status 204 No Content
 ```
+
+

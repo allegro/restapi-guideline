@@ -1,8 +1,5 @@
 # Error
 
-* [Provide Trace-Ids for Introspection](#provide-trace-ids-for-introspection)
-* [Generate structured errors](#generate-structured-errors)
-
 ## Provide Trace-Ids for Introspection
 
 Include the `Trace-Id` header in each API response that contains an
@@ -32,7 +29,7 @@ HTTP/1.1 422 Unprocessable Entity
 	        "code": "MissingDeliveryPointException",
 	        "details": "Exception was thrown from https://api.allegro.pl/points/1 in line 2",
 	        "path": "Endpoint.getDeliveries.arg1",
-	        "userMessage": "Nie wybrano punktu dla odbioru osobistego"
+	        "userMessage": "Nie wybrano punktu dla odbioru osobistego."
 	    }
     ]
 }
@@ -47,7 +44,6 @@ Generate consistent, structured response bodies concerning errors.
 * userMessage - localized message (based on `Accept-Language` header) to be presented to an application user (much more general than a message);
 this field is mandatory.
 
-Messages should not be ended with a dot or comma. Some clients might want to concatenate all user messages in to one big message and they should be able to decide
-if comas, dots or HTML list tags are the appropriate separators for their GUI.
-
 A developer can use `Trace-Id` header from a response to determine the exact flow for a given error in micro-services.
+
+

@@ -15,7 +15,7 @@ We publish this document in order to:
 * help you to understand the principles behind our REST API design if you are a developer/administrator
 who wants to interact with the API provided by Allegro Public REST API or micro-services,
 * ensure consistency between your service and the Allegro REST API if you are developing a service consuming a REST API,
-* hear your feedback (https://developer.allegro.pl/contact/).
+* hear your feedback.
 
 
 ## Allegro REST API
@@ -91,3 +91,5 @@ such as performance, scalability, simplicity, modifiability, visibility, portabi
 One of the key principles of good API design is that an interface must provide a seamless
 and user-friendly developer experience (DX) if it is to facilitate the creation of applications
 that add value to the API owner’s business.
+
+

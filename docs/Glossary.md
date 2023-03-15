@@ -1,15 +1,5 @@
 # Glossary
 
-* [General](#general)
-* [Address](#address)
-* [Image](#image)
-* [Description](#description)
-* [Category](#category)
-* [User](#user)
-* [Coordinates](#coordinates)
-* [Pagination](#pagination)
-* [Try to avoid](#try-to-avoid)
-
 The main goal of the glossary is to unify terms used by public resources in order to give a clear understanding of the Allegro REST API
 and to make the integration with Allegro smooth. Below terms should be used in resource’s names, models, objects, query parameters, etc.
 The glossary is divided into several sections, each of them represents a specific area of Allegro domain or specific technological aspect (e.g. how to represent a user).
@@ -119,3 +109,4 @@ where it should tell how many entities matched the clients criteria, NOT how man
 * **metadata** - do not use it. Almost all information from this object could be moved to parent entity
 * **picture** - use **image** instead
 * **page**, **pageIndex**, **pageNo**, **pageNumber** - do not use them; in case of pagination use `offset` instead
+

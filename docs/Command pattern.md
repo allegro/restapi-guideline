@@ -14,7 +14,7 @@ curl -X PUT https://api.allegro.pl/offers/6546456 -H "Content-Type: application/
     "status" : "RENEWED",
     // all other offer fields ...
 }
-``` 
+```
 
 or this way:
 
@@ -27,7 +27,7 @@ curl -X PATCH https://api.allegro.pl/offers/6546456 -H "Content-Type: applicatio
         "value" : "RENEWED"
     }
 ]
-``` 
+```
 
 However, it looks as programming database systems from the 90's where an update of one
 field would unleash dozens of triggers with hidden business logic, to the surprise (and dismay) of the developer.
@@ -53,13 +53,11 @@ But do not use `POST` to do it as `POST` is not idempotent in REST – use the `
 ### Adding the command
 
 ```bash
-curl -X PUT https://api.allegro.pl/offers/6546456/activate-copy-commands/c544880a-028c-4d8f-a76d-264e1ed51cd1 -H "Content-Type: application/vnd.allegro.public.v1+json" -d
+curl -X PUT https://api.allegro.pl/offers/6546456/renew-commands/23453425-34253245-3453454-345345 -H "Content-Type: application/vnd.allegro.public.v1+json" -d
 {
-    "input" : {
-        "startingAt" : "2015-08-30T17:00:00.000Z",
-        "durationLimit" : "P7D",
-        // other input data for this command
-    }
+    "fromDate" : "2015-08-30T17:00:00.000Z",
+    "duration" : "P7D",
+    // other input data for this command
 }
 ```
 
@@ -71,17 +69,10 @@ Sample response:
 ```bash
 201 Created
 {
-    "id" : "c544880a-028c-4d8f-a76d-264e1ed51cd1",
-    "input" : {
-        "startingAt" : "2015-08-30T17:00:00.000Z",
-        "durationLimit" : "P7D",
-        // other input data you passed
-    },
-    "output" : {
-        "status" : "VALIDATED_AND_RUNNING",
-        "errors" : [],
-        "newOffer" : null
-    }
+    "status" : "RUNNING",
+    "fromDate" : "2015-08-30T17:00:00.000Z",
+    "duration" : "P7D",
+    // other output data given to this command
 }
 ```
 
@@ -92,7 +83,7 @@ however the business logic will be executed only once.
 ### Checking execution status (optionally)
 
 ```bash
-curl -X GET https://api.allegro.pl/offers/6546456/activate-copy-commands/c544880a-028c-4d8f-a76d-264e1ed51cd1 -H "Accept: application/vnd.allegro.public.v1+json"
+curl -X GET https://api.allegro.pl/offers/6546456/renew-commands/23453425-34253245-3453454-345345 -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
 Response:
@@ -100,19 +91,10 @@ Response:
 ```javascript
 200 Ok
 {
-    "id" : "c544880a-028c-4d8f-a76d-264e1ed51cd1",
-    "input" : {
-        "startingAt" : "2015-08-30T17:00:00.000Z",
-        "durationLimit" : "P7D",
-        // other input data you passed
-    },
-    "output" : {
-        "status" : "SUCCESSFUL",
-        "errors" : [],
-        "newOffer" : {
-            "id" : "607445543"
-        }
-    }
+    "status" : "SUCCESSFUL",
+    "fromDate" : "2015-08-30T17:00:00.000Z",
+    "duration" : "P7D",
+    // other output data given to this command
 }
 ```
 
@@ -121,19 +103,13 @@ or if the execution of the command failed:
 ```javascript
 200 Ok
 {
-    "id" : "c544880a-028c-4d8f-a76d-264e1ed51cd1",
-    "input" : {
-        "startingAt" : "2015-08-30T17:00:00.000Z",
-        "durationLimit" : "P7D",
-        // other input data you passed
-    },
-    "output" : {
-        "status" : "FAILED",
-        "errors" : [
-            // error descriptions
-        ],
-        "newOffer" : null
-    }
+    "status" : "FAILED",
+    "fromDate" : "2015-08-30T17:00:00.000Z",
+    "duration" : "P7D",
+    // other output data given to this command
+    "errors" : [
+        // errors description
+    ]
 }
 ```
 
@@ -148,3 +124,4 @@ Developers will decide which mechanism they prefer.
 * sending command UUID's in a header
 	* this pattern is incompatible with REST and the HTTP RFC which states that non-standard headers are deprecated
 	* does not solve all the problems that the PUT and UUID in URI pattern solves
+
