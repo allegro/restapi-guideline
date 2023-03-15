@@ -1,0 +1,672 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../Documentation/">
+      
+      
+        <link rel="next" href="../HATEOAS/">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.3">
+    
+    
+      
+        <title>Glossary - Allegro REST API Design Guidelines</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.c4a75a56.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../style.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#glossary" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Allegro REST API Design Guidelines" class="md-header__button md-logo" aria-label="Allegro REST API Design Guidelines" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Allegro REST API Design Guidelines
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Glossary
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-hidden="true"  type="radio" name="__palette" id="__palette_1">
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Allegro REST API Design Guidelines" class="md-nav__button md-logo" aria-label="Allegro REST API Design Guidelines" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Allegro REST API Design Guidelines
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Resource/" class="md-nav__link">
+        Resource
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Representation/" class="md-nav__link">
+        Representation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Error/" class="md-nav__link">
+        Error
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Command%20pattern/" class="md-nav__link">
+        Command pattern
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Documentation/" class="md-nav__link">
+        Documentation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Glossary
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Glossary
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#general" class="md-nav__link">
+    General
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#address" class="md-nav__link">
+    Address
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#image" class="md-nav__link">
+    Image
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#category" class="md-nav__link">
+    Category
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#user" class="md-nav__link">
+    User
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coordinates" class="md-nav__link">
+    Coordinates
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pagination" class="md-nav__link">
+    Pagination
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#try-to-avoid" class="md-nav__link">
+    Try to avoid
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../HATEOAS/" class="md-nav__link">
+        HATEOAS
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#general" class="md-nav__link">
+    General
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#address" class="md-nav__link">
+    Address
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#image" class="md-nav__link">
+    Image
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    Description
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#category" class="md-nav__link">
+    Category
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#user" class="md-nav__link">
+    User
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coordinates" class="md-nav__link">
+    Coordinates
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pagination" class="md-nav__link">
+    Pagination
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#try-to-avoid" class="md-nav__link">
+    Try to avoid
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="glossary">Glossary</h1>
+<p>The main goal of the glossary is to unify terms used by public resources in order to give a clear understanding of the Allegro REST API
+and to make the integration with Allegro smooth. Below terms should be used in resource’s names, models, objects, query parameters, etc.
+The glossary is divided into several sections, each of them represents a specific area of Allegro domain or specific technological aspect (e.g. how to represent a user).</p>
+<p>The main goal of the glossary is to unify terms of all our public resources in order to give a clear understanding of the Allegro REST API
+and to help our clients seamlessly integrate with the Allegro. Below terms should be used in our <strong>resources' names, models, JSON objects, query parameters</strong> etc.
+The glossary was divided into several sections, each of them represents some area of Allegro domain or specific technological aspect (e.g. how to represent a user).
+You are invited to contribute the glossary, especially when you are responsible for some area in Allegro, just create a pull-request.</p>
+<h2 id="general">General</h2>
+<ul>
+<li><strong>id</strong> - entity's identifier (i.e. offer, category)</li>
+<li><strong>name</strong> - used to store name of an entity (i.e. offer, category)</li>
+<li><strong>dryRun</strong> - should a function run without any modification of data?</li>
+<li><strong>active</strong> - is the entity active?</li>
+<li><strong>inactive</strong> - is the entity inactive?</li>
+<li><strong>version</strong> - version of an entity or a system</li>
+<li><strong>count</strong> - number of matched entities (e.g. in case of pagination), used mainly for pagination
+where it should tell how many entities matched the clients criteria, NOT how many entities were returned on the given page</li>
+<li><strong>language</strong> - according to language tag (https://tools.ietf.org/html/bcp47, https://en.wikipedia.org/wiki/IETF_language_tag)</li>
+</ul>
+<h2 id="address">Address</h2>
+<ul>
+<li><strong>address</strong></li>
+<li><strong>street</strong></li>
+<li><strong>city</strong></li>
+<li><strong>province</strong></li>
+<li><strong>postCode</strong></li>
+<li><strong>countryCode</strong></li>
+</ul>
+<h2 id="image">Image</h2>
+<ul>
+<li><strong>image</strong> - keep in mind that we do not use <strong>~~picture~~</strong></li>
+<li><strong>url</strong> - image url</li>
+<li><strong>title</strong> - image title</li>
+</ul>
+<pre><code class="language-json">{
+    &quot;image&quot;: {
+        &quot;url&quot;: &quot;&quot;,
+        &quot;title&quot;: &quot;&quot;
+    }
+}
+</code></pre>
+<h2 id="description">Description</h2>
+<ul>
+<li><strong>description</strong></li>
+<li><strong>summary</strong> - brief text summary</li>
+<li><strong>text</strong> - full text description</li>
+</ul>
+<pre><code class="language-json">{
+    &quot;description&quot;: {
+        &quot;summary&quot;: &quot;&quot;,
+        &quot;text&quot;: &quot;&quot;
+    }
+}
+</code></pre>
+<h2 id="category">Category</h2>
+<ul>
+<li><strong>parent</strong> - category parent</li>
+<li><strong>leaf</strong> - is the category a leaf?</li>
+<li><strong>tree</strong> - to which category tree it belongs to?</li>
+</ul>
+<pre><code class="language-json">{
+    &quot;category&quot;: {
+        &quot;id&quot;: &quot;...&quot;,
+        &quot;name&quot;: &quot;...&quot;,
+        &quot;leaf&quot;: true,
+        &quot;tree&quot;: {
+            &quot;name&quot;: &quot;sample-tree&quot;
+        }
+    }
+}
+</code></pre>
+<h2 id="user">User</h2>
+<ul>
+<li><strong>user</strong> - Allegro user entity</li>
+<li><strong>password</strong> - user's password</li>
+<li><strong>firstName</strong></li>
+<li><strong>lastName</strong></li>
+<li><strong>companyName</strong></li>
+<li><strong>sex</strong></li>
+<li><strong>phoneNumber</strong></li>
+<li><strong>email</strong> - user's email</li>
+<li><strong>birthDate</strong> - user's birth date</li>
+<li><strong>confirmation</strong></li>
+<li><strong>registration</strong></li>
+</ul>
+<h2 id="coordinates">Coordinates</h2>
+<ul>
+<li><strong>coordinates</strong> - map coordinates</li>
+<li><strong>lat</strong> - latitude</li>
+<li><strong>lon</strong> - longitude</li>
+</ul>
+<pre><code class="language-json">{
+    &quot;coordinates&quot;: {
+        &quot;lat&quot;: 52.33374,
+        &quot;lon&quot;: 16.808437
+    }
+}
+</code></pre>
+<h2 id="pagination">Pagination</h2>
+<ul>
+<li><strong>offset</strong> - page index (do not use page, pageIndex, etc.)</li>
+<li><strong>limit</strong> - page size (do not use pageSize, size, length, etc.)</li>
+</ul>
+<h2 id="try-to-avoid">Try to avoid</h2>
+<ul>
+<li><strong>metadata</strong> - do not use it. Almost all information from this object could be moved to parent entity</li>
+<li><strong>picture</strong> - use <strong>image</strong> instead</li>
+<li><strong>page</strong>, <strong>pageIndex</strong>, <strong>pageNo</strong>, <strong>pageNumber</strong> - do not use them; in case of pagination use <code>offset</code> instead</li>
+</ul>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.efa0ade1.min.js"></script>
+      
+    
+  </body>
+</html>

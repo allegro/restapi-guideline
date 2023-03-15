@@ -1,0 +1,1205 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../Resource/">
+      
+      
+        <link rel="next" href="../Error/">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.3">
+    
+    
+      
+        <title>Representation - Allegro REST API Design Guidelines</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.c4a75a56.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../style.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#representation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Allegro REST API Design Guidelines" class="md-header__button md-logo" aria-label="Allegro REST API Design Guidelines" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Allegro REST API Design Guidelines
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Representation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-hidden="true"  type="radio" name="__palette" id="__palette_1">
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Allegro REST API Design Guidelines" class="md-nav__button md-logo" aria-label="Allegro REST API Design Guidelines" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Allegro REST API Design Guidelines
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Resource/" class="md-nav__link">
+        Resource
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Representation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Representation
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#property-name-format" class="md-nav__link">
+    Property name format
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provide-resource-uuids" class="md-nav__link">
+    Provide resource (UU)IDs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null-values" class="md-nav__link">
+    Null values
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#empty-collections" class="md-nav__link">
+    Empty collections
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-utc-times-formatted-in-iso8601" class="md-nav__link">
+    Use UTC times formatted in ISO8601
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#time-without-date" class="md-nav__link">
+    Time without date
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#country-language-and-translations" class="md-nav__link">
+    Country, language and translations
+  </a>
+  
+    <nav class="md-nav" aria-label="Country, language and translations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#value-representation" class="md-nav__link">
+    Value representation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#translations" class="md-nav__link">
+    Translations
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#price-and-currency" class="md-nav__link">
+    Price and currency
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enum-values" class="md-nav__link">
+    Enum values
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nesting-foreign-resources-relations" class="md-nav__link">
+    Nesting foreign resources relations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provide-full-resources-where-available" class="md-nav__link">
+    Provide full resources where available
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#accept-json-in-request-bodies" class="md-nav__link">
+    Accept JSON in request bodies
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keep-json-response-minified" class="md-nav__link">
+    Keep JSON response minified
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filtering" class="md-nav__link">
+    Filtering
+  </a>
+  
+    <nav class="md-nav" aria-label="Filtering">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simple-filters-in-query-string" class="md-nav__link">
+    Simple filters in query string
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter-by-multiple-values-in-one-filed" class="md-nav__link">
+    Filter by multiple values in one filed
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-filtering-similar-to-search-concerning-many-parameters-and-nested-structures" class="md-nav__link">
+    Advanced filtering (similar to search) concerning many parameters and nested structures
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sorting" class="md-nav__link">
+    Sorting
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wrap-collection-in-object" class="md-nav__link">
+    Wrap collection in object
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consistent-paging-scheme" class="md-nav__link">
+    Consistent paging scheme
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keep-response-gziped" class="md-nav__link">
+    Keep response gziped
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Error/" class="md-nav__link">
+        Error
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Command%20pattern/" class="md-nav__link">
+        Command pattern
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Documentation/" class="md-nav__link">
+        Documentation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Glossary/" class="md-nav__link">
+        Glossary
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../HATEOAS/" class="md-nav__link">
+        HATEOAS
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#property-name-format" class="md-nav__link">
+    Property name format
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provide-resource-uuids" class="md-nav__link">
+    Provide resource (UU)IDs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#null-values" class="md-nav__link">
+    Null values
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#empty-collections" class="md-nav__link">
+    Empty collections
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-utc-times-formatted-in-iso8601" class="md-nav__link">
+    Use UTC times formatted in ISO8601
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#time-without-date" class="md-nav__link">
+    Time without date
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#country-language-and-translations" class="md-nav__link">
+    Country, language and translations
+  </a>
+  
+    <nav class="md-nav" aria-label="Country, language and translations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#value-representation" class="md-nav__link">
+    Value representation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#translations" class="md-nav__link">
+    Translations
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#price-and-currency" class="md-nav__link">
+    Price and currency
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enum-values" class="md-nav__link">
+    Enum values
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nesting-foreign-resources-relations" class="md-nav__link">
+    Nesting foreign resources relations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#provide-full-resources-where-available" class="md-nav__link">
+    Provide full resources where available
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#accept-json-in-request-bodies" class="md-nav__link">
+    Accept JSON in request bodies
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keep-json-response-minified" class="md-nav__link">
+    Keep JSON response minified
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filtering" class="md-nav__link">
+    Filtering
+  </a>
+  
+    <nav class="md-nav" aria-label="Filtering">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simple-filters-in-query-string" class="md-nav__link">
+    Simple filters in query string
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter-by-multiple-values-in-one-filed" class="md-nav__link">
+    Filter by multiple values in one filed
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-filtering-similar-to-search-concerning-many-parameters-and-nested-structures" class="md-nav__link">
+    Advanced filtering (similar to search) concerning many parameters and nested structures
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sorting" class="md-nav__link">
+    Sorting
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wrap-collection-in-object" class="md-nav__link">
+    Wrap collection in object
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consistent-paging-scheme" class="md-nav__link">
+    Consistent paging scheme
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keep-response-gziped" class="md-nav__link">
+    Keep response gziped
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="representation">Representation</h1>
+<h2 id="property-name-format">Property name format</h2>
+<p>Property names should be meaningful.
+Use camel case in parameters and properties (e.g. <code>firstName</code>) instead of underscoring (e.g. <code>first_name</code>):</p>
+<pre><code class="language-javascript">&quot;firstName&quot;: &quot;John&quot;,
+&quot;lastName&quot;: &quot;Smith&quot;
+</code></pre>
+<p>Array types should have plural property names. All other property names should be singular.</p>
+<pre><code class="language-javascript">{
+  // Singular
+  &quot;user&quot;: &quot;123456&quot;,
+  // An array of siblings, plural
+  &quot;offers&quot;: [{},{}],
+  // &quot;totalItem&quot; doesn't sound right
+  &quot;totalCount&quot;: 10,
+  // But maybe &quot;offersCount&quot; or just &quot;count&quot; is better
+  &quot;offersCount&quot;: 10,
+}
+</code></pre>
+<h2 id="provide-resource-uuids">Provide resource (UU)IDs</h2>
+<p>Assign an id attribute by default to each resource. Use UUIDs unless you
+have a very good reason not to. Do not use IDs that will not be globally
+unique across instances of the service or other resources in the
+service, in particular auto-incrementing IDs.</p>
+<p>Render UUIDs as a lowercase string in <code>8-4-4-4-12</code> format, e.g.:</p>
+<pre><code class="language-javascript">&quot;id&quot;: &quot;01234567-89ab-cdef-0123-456789abcdef&quot;
+</code></pre>
+<h2 id="null-values">Null values</h2>
+<p>Blank fields are generally included as <code>null</code> instead of being blank strings or omitted. If a property state or value is unknown, consider setting the property to <code>null</code>.</p>
+<p>Example of an unknown value or state:</p>
+<pre><code class="language-javascript">{
+  // ...
+  &quot;buyerAddresses&quot;:[
+        {
+           &quot;type&quot;:1,
+           &quot;company&quot;:null,
+           &quot;name&quot;:&quot;Jaś Fasola&quot;,
+           &quot;street&quot;:&quot;Zakręt 56&quot;,
+           &quot;postCode&quot;:&quot;00-999&quot;,
+           &quot;city&quot;:&quot;Lądek Zdrój&quot;,
+           &quot;province&quot;:&quot;Pomorskie&quot;
+        }
+     ],
+  // ...
+}
+</code></pre>
+<h2 id="empty-collections">Empty collections</h2>
+<p>If you want to return empty collection, return <code>[]</code> instead of <code>null</code>. Some client frameworks cannot iterate over <code>null</code> and need extra null checking.  Iteration over <code>[]</code> is always possible. e.g.:</p>
+<pre><code class="language-javascript">{
+    &quot;status&quot;: &quot;OK&quot;,
+    &quot;errors&quot;: []
+}
+</code></pre>
+<h2 id="use-utc-times-formatted-in-iso8601">Use UTC times formatted in ISO8601</h2>
+<p>Accept and return times in UTC only. Render times as a string ISO8601 format (yyyy-MM-dd'T'HH:mm:ss.SSSZ),
+e.g.:</p>
+<pre><code class="language-javascript">{
+  // ...
+  &quot;createdAt&quot;: &quot;2012-01-01T12:00:00.000Z&quot;,
+  &quot;updatedAt&quot;: &quot;2012-01-01T13:00:00.000Z&quot;,
+  // ...
+}
+</code></pre>
+<h2 id="time-without-date">Time without date</h2>
+<p>Render time value as a string in format (HH:mm:ss.SSS) without time zone information, e.g.:</p>
+<pre><code>&quot;from&quot;: &quot;08:00:00.000&quot;,
+&quot;to&quot;: &quot;16:00:00.000&quot;
+</code></pre>
+<p>There is no need to add information about a time zone – a client should present value received from an API without any modification.
+If you need to present time in a specific time zone, use UTC for full date and time.</p>
+<h2 id="country-language-and-translations">Country, language and translations</h2>
+<h3 id="value-representation">Value representation</h3>
+<p>If you need to send some property that indicates a country then use the <a href="http://en.wikipedia.org/wiki/ISO_3166-1#Current_codes">ISO 3166 Alpha-2</a>
+codes for that - 2 letters, always upper-cased.</p>
+<p>Sample JSON with such a property:</p>
+<pre><code>{
+    &quot;address&quot; : {
+        // ...
+        &quot;city&quot; : &quot;Poznań&quot;
+        &quot;countryCode&quot;: &quot;PL&quot;
+    }
+}
+</code></pre>
+<p>If you want to refer to a language saved in the property, use the <a href="http://tools.ietf.org/html/rfc1766">RFC 1766</a>
+language tag. It combines the previously mentioned <a href="http://en.wikipedia.org/wiki/ISO_3166-1">ISO 3166</a> country codes and
+<a href="https://en.wikipedia.org/wiki/ISO_639">ISO 639</a> language names.</p>
+<p>Sample JSON with such a property:</p>
+<pre><code>{
+    &quot;user&quot; : {
+        // ...
+        &quot;prefferedLanguage&quot;: &quot;en-GB&quot; //  form of English in the UK, but also countries such as Canada
+    }
+}
+</code></pre>
+<p>Java sample for <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html">Locale</a> supporting these formats:</p>
+<pre><code class="language-java">Locale locale = Locale.forLanguageTag(&quot;en-GB&quot;);
+String countryCode = locale.getCountry();
+// countryCode == &quot;GB&quot;
+</code></pre>
+<p>The above actually parses according to the <a href="http://tools.ietf.org/html/rfc5646">RFC 5646</a> standard which is a backward
+compatible update to the previously mentioned <a href="http://tools.ietf.org/html/rfc1766">RFC 1766</a>.</p>
+<h3 id="translations">Translations</h3>
+<p>In the section above we presented how the values of country and language references should be
+represented in JSON, query params, etc. Translating user messages for the client is a different topic.
+The HTTP standard defines an appropriate header for that: <code>Accept-Language</code> <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4">RFC 2616, 14.4</a>.
+If the client desires to receive localized user messages in the response, it should set the <code>Accept-Language</code> header in its request.</p>
+<p>This is required to handle at least two types of "Accept-Language" :</p>
+<pre><code>Accept-Language: en-* (* is any valid type eg. &quot;GB&quot;, &quot;US&quot;)
+</code></pre>
+<p>and</p>
+<pre><code>Accept-Language: pl-PL
+</code></pre>
+<p>By sending the information presented above, you will inform the backing service that all user messages (including <a href="#error">error</a> messages) should be translated to English or Polish, respectively. If "Accept-Language" header is omitted or set to an unsupported value then the language should fallback to en-US.</p>
+<h2 id="price-and-currency">Price and currency</h2>
+<p>All prices (included in response and request bodies) are requested and returned as a structure with <code>amount</code> and <code>currency</code>
+fields as proposed by <a href="https://developer.paypal.com/docs/api/#common-objects-for-payouts">paypal</a>, e.g.</p>
+<pre><code class="language-javascript">{
+    &quot;buyNow&quot;: {
+        &quot;amount&quot;: &quot;11.25&quot;,
+        &quot;currency&quot;: &quot;PLN&quot;
+    }
+}
+</code></pre>
+<ul>
+<li><code>currency</code> - 3 letter currency code as defined in <a href="http://en.wikipedia.org/wiki/ISO_4217#Active_codes">ISO 4217</a></li>
+<li><code>amount</code> - string representation, at least one digit before a decimal separator <strong>without the thousands separator</strong>,
+then <strong>dot (.)</strong> as a decimal separator, then <strong>at most</strong> two digits after the decimal separator.</li>
+</ul>
+<p>Such a method of presenting <code>amount</code> makes the interpretation easier, provides with precision and protects against rounding errors.</p>
+<p>Some <code>amount</code> examples:</p>
+<ul>
+<li>"0.00"</li>
+<li>"0.01"</li>
+<li>"1.00"</li>
+<li>"1.10"</li>
+<li>"11.25"</li>
+<li>"1234567.25"</li>
+<li>"9999999.99"</li>
+</ul>
+<p>If you want to submit price <code>amount</code> and <code>currency</code> as a response to the GET request, you should use:</p>
+<pre><code class="language-bash">curl https://api.allegro.pl/contests?totalAmount.amount=11.25&amp;totalAmount.currency=PLN  \
+    -H &quot;Accept: application/vnd.allegro.public.v1+json&quot;
+</code></pre>
+<h2 id="enum-values">Enum values</h2>
+<p>Enum values are represented as uppercase strings.</p>
+<p>As API grows, enum values may be added, removed or changed. Using strings as enum values ensures that
+downstream clients can gracefully handle changes to enum values.</p>
+<p>Java code:</p>
+<pre><code class="language-java">public enum Color {
+  WHITE,
+  BLACK,
+  RED,
+  YELLOW,
+  BLUE
+}
+</code></pre>
+<p>JSON Object:</p>
+<pre><code class="language-javascript">{
+  &quot;color&quot;: &quot;WHITE&quot;
+}
+</code></pre>
+<h2 id="nesting-foreign-resources-relations">Nesting foreign resources relations</h2>
+<p>Nest foreign resources references, even if the only information is <code>id</code> of the object referred to, with a nested object, e.g.:</p>
+<pre><code class="language-javascript">{
+  &quot;id&quot;: &quot;01234567-89ab-cdef-0123-456789abcdef&quot;,
+  &quot;name&quot;: &quot;offer-name&quot;,
+  &quot;seller&quot;: {
+    &quot;id&quot;: &quot;5d8201b0...&quot;,
+    &quot;name&quot;: &quot;user-name&quot;
+  },
+  // ...
+}
+</code></pre>
+<p>Instead of a flat structure e.g.:</p>
+<pre><code class="language-javascript">{
+  &quot;id&quot;: &quot;01234567-89ab-cdef-0123-456789abcdef&quot;,
+  &quot;name&quot;: &quot;offer-name&quot;,
+  &quot;sellerId&quot;: &quot;5d8201b0...&quot;,
+  &quot;sellerName&quot;: &quot;user-name&quot;
+  // ...
+}
+</code></pre>
+<p>This approach makes it possible to inline more information about the
+related resource without having to change the structure of the response
+or introduce more top-level response fields, e.g.:</p>
+<pre><code class="language-javascript">{
+  &quot;id&quot;: &quot;01234567-89ab-cdef-0123-456789abcdef&quot;,
+  &quot;name&quot;: &quot;offer-name&quot;,
+  &quot;seller&quot;: {
+    &quot;id&quot;: &quot;5d8201b0...&quot;,
+    &quot;name&quot;: &quot;user-name&quot;,
+    &quot;email&quot;: &quot;user@allegrogroup.com&quot;
+  },
+  // ...
+}
+</code></pre>
+<h2 id="provide-full-resources-where-available">Provide full resources where available</h2>
+<p>Provide the full resource representation (i.e. the object with all properties) whenever possible in the response.</p>
+<h2 id="accept-json-in-request-bodies">Accept JSON in request bodies</h2>
+<p>Accept JSON as Content-Type data in <code>PUT</code>/<code>PATCH</code>/<code>POST</code> request bodies, either
+instead of or in addition to form-encoded data. This creates symmetry
+with JSON response bodies, e.g.:</p>
+<pre><code class="language-bash">curl -X POST https://api.allegro.pl/users \
+    -H &quot;Content-Type: application/vnd.allegro.public.v1+json&quot; \
+    -d '{&quot;name&quot;: &quot;user-name&quot;}'
+</code></pre>
+<pre><code class="language-javascript">{
+  &quot;id&quot;: &quot;01234567-89ab-cdef-0123-456789abcdef&quot;,
+  &quot;name&quot;: &quot;user-name&quot;,
+  // ...
+}
+</code></pre>
+<h2 id="keep-json-response-minified">Keep JSON response minified</h2>
+<p>Extra whitespace adds needless response size to requests, and many
+clients (e.g. web browsers) will automatically "improve" JSON
+output. It is best to keep JSON responses minified e.g.:</p>
+<pre><code class="language-json">{&quot;id&quot;: &quot;01234567-89ab-cdef-0123-456789abcdef&quot;,&quot;name&quot;:&quot;offer-name&quot;,&quot;seller&quot;:{&quot;id&quot;:&quot;5d8201b0...&quot;,
+&quot;name&quot;:&quot;user-name&quot;,&quot;email&quot;:&quot;user@allegrogroup.com&quot;}
+}
+</code></pre>
+<p>Instead of e.g.:</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;01234567-89ab-cdef-0123-456789abcdef&quot;,
+  &quot;name&quot;: &quot;offer-name&quot;,
+  &quot;seller&quot;: {
+    &quot;id&quot;: &quot;5d8201b0...&quot;,
+    &quot;name&quot;: &quot;user-name&quot;,
+    &quot;email&quot;: &quot;user@allegrogroup.com&quot;
+  }
+}
+</code></pre>
+<h2 id="filtering">Filtering</h2>
+<h3 id="simple-filters-in-query-string">Simple filters in query string</h3>
+<p>Use a query parameter for each field that supports filtering (most of them probably do not provide such support; you should document what fields are filterable).
+For example, when submitting a request for a list of general delivery points to the <code>/general-deliveries</code> endpoint, you may want to limit them to the given name and city.
+To do so, use a request such as:</p>
+<pre><code class="language-bash">curl -X GET https://api.allegro.pl/general-deliveries?name=UP+Poznań+41&amp;address.city=Poznań -H &quot;Accept: application/vnd.allegro.public.v1+json&quot;
+</code></pre>
+<p>Here, <code>name</code> and <code>address.city</code> are fields that support filtering.</p>
+<p>Simple rules for query string filters:</p>
+<ul>
+<li>refer directly to collection entities (<code>name</code>, not <code>points.name</code>)</li>
+<li>use "." (dot) to indicate a (unique) field name in nested structure (<code>address.city</code>, not just <code>city</code>)</li>
+</ul>
+<p>Sample response:</p>
+<pre><code class="language-json">{
+  &quot;points&quot;: [
+    {
+      &quot;id&quot;: &quot;de305d54-75b4-431b-adb2-eb6b9e546014&quot;,
+      &quot;name&quot;: &quot;UP Poznań 41&quot;,
+      &quot;address&quot;: {
+        &quot;street&quot;: &quot;Ulica Starołęcka 42&quot;,
+        &quot;code&quot;: &quot;61-360&quot;,
+        &quot;city&quot;: &quot;Poznań&quot;
+      }
+    }
+  ]
+}
+</code></pre>
+<p>To support ranges in filtering use virtual fields with suffixes :</p>
+<ul>
+<li><strong>gt</strong> - greater than</li>
+<li><strong>lt</strong> - less than</li>
+<li><strong>gte</strong> - greater or equal</li>
+<li><strong>lte</strong> - less or equal</li>
+</ul>
+<p>Example request: </p>
+<pre><code class="language-bash">curl -X GET https://api.allegro.pl/general-deliveries?rate.gt=200 -H &quot;Accept: application/vnd.allegro.public.v1+json&quot;
+</code></pre>
+<h3 id="filter-by-multiple-values-in-one-filed">Filter by multiple values in one filed</h3>
+<p>If you want to filter many values in one field, you should repeat the field name many times in URL adding different values, e.g.
+to filter shipping payments in <code>PRE</code> and <code>POST</code> values use:</p>
+<pre><code class="language-bash">curl -X GET https://api.allegro.pl/general-deliveries?shipments.payments=PRE&amp;shipments.payments=POST -H &quot;Accept: application/vnd.allegro.public.v1+json&quot;
+</code></pre>
+<p>This type of convention, i.e. <code>shipments.payments=PRE&amp;shipments.payments=POST</code> is supported by many frameworks out of the box.</p>
+<h3 id="advanced-filtering-similar-to-search-concerning-many-parameters-and-nested-structures">Advanced filtering (similar to search) concerning many parameters and nested structures</h3>
+<p>For advanced filtering:</p>
+<ul>
+<li>create search id from your data – sending <code>POST</code> body to "new resource" (e.g. <code>/product-searches</code>) will return search id (in <code>Location</code> header) for a query</li>
+<li>get collection for search id – use search id returned after the operation mentioned above to get expected collection of entities by calling base resource (e.g. <code>/products?search.id=</code>)</li>
+<li>get search data for search id – use search id returned after the operation mentioned above to get search data by calling "new resource" (e.g. <code>/product-searches</code>)</li>
+</ul>
+<p>Rules:</p>
+<ul>
+<li>"new resource" should be presented in <code>/*-searches</code> convention where the base resource name is singular, e.g. in case of <code>/products</code> it should be named <code>/product-searches</code></li>
+<li>entity in a request <code>POST</code> body in <code>/*-searches</code> (e.g. <code>/product-searches</code>)</li>
+<li>handle query string parameter <code>search.id</code> in base resource (e.g. <code>/products</code>) to handle filters</li>
+<li>entities created by a "new resource" should be versioned as the base resource – it should be possible to get a
+suitable version of <code>/product-searches</code> resource using any <code>search.id</code> for each new version of e.g. <code>/products</code> resource</li>
+<li>the new resource version should not break backward compatibility (if possible)</li>
+</ul>
+<p>Sample entities in <code>/products</code> collection</p>
+<pre><code class="language-json">{
+    &quot;products&quot;: [
+        {
+            &quot;id&quot;: &quot;7d3e4d5a-817c-45f8-930b-e319dbcedc5c&quot;,
+            &quot;name&quot;: &quot;Doładowanie Heyah 5 zł&quot;,
+            &quot;parameterGroups&quot;: [
+                {
+                    &quot;id&quot;: &quot;4be770c3-6805-4967-8f13-0457dc8ed446&quot;,
+                    &quot;name&quot;: &quot;Bazowe informacje&quot;,
+                    &quot;parameters&quot;: [
+                        {
+                            &quot;id&quot;: &quot;ce87a49d-55c3-476c-b7f8-349dfaf89510&quot;,
+                            &quot;name&quot;: &quot;Rodzaj usługi&quot;,
+                            &quot;values&quot;: [
+                                &quot;Doładowanie&quot;
+                            ]
+                        },
+                        {
+                            &quot;id&quot;: &quot;63baaaf2-534a-4c20-b1ed-e44952d7e556&quot;,
+                            &quot;name&quot;: &quot;Nazwa&quot;,
+                            &quot;values&quot;: [
+                                &quot;Doładowanie Heyah 5 zł&quot;
+                            ]
+                        },
+                        {
+                            &quot;id&quot;: &quot;ab98c5ec-f9c6-440f-9af0-a19caaba7eca&quot;,
+                            &quot;name&quot;: &quot;Operator&quot;,
+                            &quot;values&quot;: [
+                                &quot;Heyah&quot;
+                            ]
+                        },
+                        {
+                            &quot;id&quot;: &quot;7fdd3aa4-3cab-4d4f-93c4-9c2ff05bec86&quot;,
+                            &quot;name&quot;: &quot;Wartość doładowania&quot;,
+                            &quot;values&quot;: [
+                                &quot;5 zł&quot;
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+</code></pre>
+<p>Let’s assume you are looking for <code>products</code> with:</p>
+<ul>
+<li><code>parameterGroups.id</code> with value <code>4be770c3-6805-4967-8f13-0457dc8ed446</code></li>
+<li>dynamic parameters with many values, e.g. a dynamic parameter of <code>id</code> <code>ce87a49d-55c3-476c-b7f8-349dfaf89510</code>
+with <code>value</code> <code>Doładowanie</code> and parameters of <code>id</code> <code>ab98c5ec-f9c6-440f-9af0-a19caaba7eca</code> with <code>value</code> <code>Heyah</code></li>
+</ul>
+<p>you can submit a request for <code>/product-searches</code>:</p>
+<pre><code class="language-bash">curl -X POST https://api.allegro.pl/product-searches -H &quot;Accept: application/vnd.allegro.public.v1+json&quot; -d
+{
+    &quot;limit&quot;: 100,
+    &quot;offset&quot;: 150,
+    &quot;parameterGroups&quot;: [
+        {
+            &quot;id&quot;: &quot;4be770c3-6805-4967-8f13-0457dc8ed446&quot;,
+            &quot;parameters&quot;: [
+                {
+                    &quot;id&quot;: &quot;ce87a49d-55c3-476c-b7f8-349dfaf89510&quot;,
+                    &quot;values&quot;: [
+                        &quot;Doładowanie&quot;
+                    ]
+                },
+                {
+                    &quot;id&quot;: &quot;ab98c5ec-f9c6-440f-9af0-a19caaba7eca&quot;,
+                    &quot;values&quot;: [
+                        &quot;Heyah&quot;
+                    ]
+                }
+            ]
+        }
+    ]
+}
+</code></pre>
+<p>In the sample above server should write down the version of search data used to create it from the <code>Accept</code> header – <code>application/vnd.allegro.public.v1+json</code>.
+It will improve the process of mapping from one search data version to another in the future.</p>
+<p>In return, you get an id for the created "search" (in <code>Location</code> header, status <code>HTTP 201 Created</code>), which holds your search results. To view them, provide:</p>
+<pre><code class="language-bash">curl -X GET https://api.allegro.pl/product-searches/4be770c3-4967-6805-8f13-0457dc8ed446 -H &quot;Accept: application/vnd.allegro.public.v1+json&quot;
+</code></pre>
+<p>Important note:  There is no way to override filters for a given id - you must create a new search resource.</p>
+<p>Use <code>search.id</code> parameter to get filtered collection of entities with a sort parameter such as:</p>
+<pre><code class="language-bash">curl -X GET https://api.allegro.pl/products?search.id=4be770c3-4967-6805-8f13-0457dc8ed446&amp;sort=-parameterGroups.name -H &quot;Accept: application/vnd.allegro.public.v1+json&quot;
+</code></pre>
+<h2 id="sorting">Sorting</h2>
+<p>Sorting: A generic parameter <code>sort</code> can be used to describe sorting rules.
+Adjust complex sorting requirements by letting the sort parameter take in a list of comma separated fields, each with a possible unary negative to imply descending sort order.
+Let's look at some examples:</p>
+<ul>
+<li><code>GET /offers?sort=-buyNow</code> – Retrieves a list of offers put in a descending order by buyNow price</li>
+<li><code>GET /offers?sort=-buyNow,createdAt</code> – Retrieves a list of offers put in a descending order by buyNow price. Within a specific buyNow price, older offers are presented as first.</li>
+</ul>
+<h2 id="wrap-collection-in-object">Wrap collection in object</h2>
+<p>Always return root element as an object. This way you can add extra <code>metadata</code> fields to the response without compatibility breakdown.</p>
+<p>For example, in the case of the <code>offers</code> collection, you can add a metadata field such as <code>count</code> containing a number of matching offers:</p>
+<pre><code class="language-json">{
+    &quot;offers&quot;: [
+        {
+            &quot;id&quot;: &quot;01234567-89ab-cdef-0123-456789abcdef&quot;,
+            &quot;name&quot;: &quot;PINK FLOYD: THE ENDLESS RIVER&quot;
+        },
+        {
+            &quot;id&quot;: &quot;11234567-89ab-cdef-0123-456789abcdef&quot;,
+            &quot;name&quot;: &quot;Ufomammut - Eve&quot;
+        }
+    ],
+    &quot;count&quot;: 4674
+}
+</code></pre>
+<p>When a collection is in the root, you cannot add extra field there.</p>
+<pre><code class="language-json">[
+    {
+        &quot;id&quot;: &quot;01234567-89ab-cdef-0123-456789abcdef&quot;,
+        &quot;name&quot;: &quot;PINK FLOYD: THE ENDLESS RIVER&quot;
+    },
+    {
+        &quot;id&quot;: &quot;11234567-89ab-cdef-0123-456789abcdef&quot;,
+        &quot;name&quot;: &quot;Ufomammut - Eve&quot;
+    }
+]
+</code></pre>
+<p>Metadata should only contain direct properties of the response set, not properties of the members of the response set.</p>
+<h2 id="consistent-paging-scheme">Consistent paging scheme</h2>
+<p>Use <code>offset</code> instead of <code>page</code> and <code>limit</code> parameters. It is much more flexible for the client, e.g.</p>
+<pre><code class="language-json">GET /offers?offset=0&amp;limit=100
+GET /offers?offset=100&amp;limit=500
+</code></pre>
+<h2 id="keep-response-gziped">Keep response gziped</h2>
+<p>All responses should be gziped based on the client <code>Accept-Encoding: gzip</code> header and return information about used encode method in the <code>Content-Encoding: gzip</code> header.</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.efa0ade1.min.js"></script>
+      
+    
+  </body>
+</html>

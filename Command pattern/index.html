@@ -1,0 +1,619 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../Error/">
+      
+      
+        <link rel="next" href="../Documentation/">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.3">
+    
+    
+      
+        <title>Command pattern - Allegro REST API Design Guidelines</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.c4a75a56.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../style.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#command-pattern" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Allegro REST API Design Guidelines" class="md-header__button md-logo" aria-label="Allegro REST API Design Guidelines" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Allegro REST API Design Guidelines
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Command pattern
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-hidden="true"  type="radio" name="__palette" id="__palette_1">
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Allegro REST API Design Guidelines" class="md-nav__button md-logo" aria-label="Allegro REST API Design Guidelines" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Allegro REST API Design Guidelines
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Resource/" class="md-nav__link">
+        Resource
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Representation/" class="md-nav__link">
+        Representation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Error/" class="md-nav__link">
+        Error
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Command pattern
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Command pattern
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#problem" class="md-nav__link">
+    Problem
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solution" class="md-nav__link">
+    Solution
+  </a>
+  
+    <nav class="md-nav" aria-label="Solution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-the-command" class="md-nav__link">
+    Adding the command
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checking-execution-status-optionally" class="md-nav__link">
+    Checking execution status (optionally)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#antypatterns-replaced-by-this-pattern" class="md-nav__link">
+    Antypatterns replaced by this pattern
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Documentation/" class="md-nav__link">
+        Documentation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Glossary/" class="md-nav__link">
+        Glossary
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../HATEOAS/" class="md-nav__link">
+        HATEOAS
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#problem" class="md-nav__link">
+    Problem
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solution" class="md-nav__link">
+    Solution
+  </a>
+  
+    <nav class="md-nav" aria-label="Solution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-the-command" class="md-nav__link">
+    Adding the command
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checking-execution-status-optionally" class="md-nav__link">
+    Checking execution status (optionally)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#antypatterns-replaced-by-this-pattern" class="md-nav__link">
+    Antypatterns replaced by this pattern
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="command-pattern">Command pattern</h1>
+<h2 id="problem">Problem</h2>
+<p>Mapping CRUD operations to semantics of HTTP <code>POST</code>, <code>PUT</code>, <code>DELETE</code> is easy. However that is not the case for more complex operations that do more
+than simply send the new state of a single resource. An example of such operations is the renewal of offers on Allegro -  the operation requires some input data
+and modifies lots of fields in the given offer causing business changes in many integrated services (settlement, fraud monitoring, etc.).</p>
+<p>How to model this type of a non-trivial operation in REST? It can be a change caused by updating the offers status as presented below:</p>
+<pre><code class="language-bash">curl -X PUT https://api.allegro.pl/offers/6546456 -H &quot;Content-Type: application/vnd.allegro.public.v1+json&quot; -d
+{
+    &quot;status&quot; : &quot;RENEWED&quot;,
+    // all other offer fields ...
+}
+</code></pre>
+<p>or this way:</p>
+<pre><code class="language-bash">curl -X PATCH https://api.allegro.pl/offers/6546456 -H &quot;Content-Type: application/vnd.allegro.public.v1+json&quot; -d
+[
+    {
+        &quot;op&quot; : &quot;replace&quot;,
+        &quot;path&quot; : &quot;/status&quot;,
+        &quot;value&quot; : &quot;RENEWED&quot;
+    }
+]
+</code></pre>
+<p>However, it looks as programming database systems from the 90's where an update of one
+field would unleash dozens of triggers with hidden business logic, to the surprise (and dismay) of the developer.</p>
+<p>Beside this risky programming style, you have to ask yourself the following questions:</p>
+<ul>
+<li>what if the given operation requires input data that is not present in the resources model?</li>
+<li>what if the operation is so complex that you must execute it asynchronously?</li>
+<li>what should be returned in response to PUT or PATCH then? how to trace the status of that asynchronous operation?</li>
+</ul>
+<h2 id="solution">Solution</h2>
+<p>All the above problems can be solved by using the command pattern that gives you:</p>
+<ul>
+<li>a verbose declaration of more complex operations in the system,</li>
+<li>a standard mechanism to trace the status of asynchronous operations,</li>
+<li>an idempotent way to execute this operation.</li>
+</ul>
+<p>To implement this pattern add a sub-resource with commands to your business resource, for example: <code>/offers/{offerId}/{command-type}-commands</code>.
+In this example if you want to execute a complex operation on an offer add the operation input data to the appropriate commands collection.
+But do not use <code>POST</code> to do it as <code>POST</code> is not idempotent in REST – use the <code>PUT</code> method and an UUID generated by the client.</p>
+<h3 id="adding-the-command">Adding the command</h3>
+<pre><code class="language-bash">curl -X PUT https://api.allegro.pl/offers/6546456/renew-commands/23453425-34253245-3453454-345345 -H &quot;Content-Type: application/vnd.allegro.public.v1+json&quot; -d
+{
+    &quot;fromDate&quot; : &quot;2015-08-30T17:00:00.000Z&quot;,
+    &quot;duration&quot; : &quot;P7D&quot;,
+    // other input data for this command
+}
+</code></pre>
+<p>Although many developers are used to apply PUT method only for updates, you must be aware that the semantics of this method is much wider according to the HTTP RFC.
+See <a href="http://tools.ietf.org/html/rfc7231#section-4.3.4">RFC 7231</a> for more details.</p>
+<p>Sample response:</p>
+<pre><code class="language-bash">201 Created
+{
+    &quot;status&quot; : &quot;RUNNING&quot;,
+    &quot;fromDate&quot; : &quot;2015-08-30T17:00:00.000Z&quot;,
+    &quot;duration&quot; : &quot;P7D&quot;,
+    // other output data given to this command
+}
+</code></pre>
+<p>After adding this command, the service will execute it asynchronously.
+It should return the <code>HTTP 201 Created</code> status code even if you send this request many times.
+however the business logic will be executed only once.</p>
+<h3 id="checking-execution-status-optionally">Checking execution status (optionally)</h3>
+<pre><code class="language-bash">curl -X GET https://api.allegro.pl/offers/6546456/renew-commands/23453425-34253245-3453454-345345 -H &quot;Accept: application/vnd.allegro.public.v1+json&quot;
+</code></pre>
+<p>Response:</p>
+<pre><code class="language-javascript">200 Ok
+{
+    &quot;status&quot; : &quot;SUCCESSFUL&quot;,
+    &quot;fromDate&quot; : &quot;2015-08-30T17:00:00.000Z&quot;,
+    &quot;duration&quot; : &quot;P7D&quot;,
+    // other output data given to this command
+}
+</code></pre>
+<p>or if the execution of the command failed:</p>
+<pre><code class="language-javascript">200 Ok
+{
+    &quot;status&quot; : &quot;FAILED&quot;,
+    &quot;fromDate&quot; : &quot;2015-08-30T17:00:00.000Z&quot;,
+    &quot;duration&quot; : &quot;P7D&quot;,
+    // other output data given to this command
+    &quot;errors&quot; : [
+        // errors description
+    ]
+}
+</code></pre>
+<p>It is also recommended to provide information about command status changes in an event bus.
+Developers will decide which mechanism they prefer.</p>
+<h2 id="antypatterns-replaced-by-this-pattern">Antypatterns replaced by this pattern</h2>
+<ul>
+<li>POST-based command pattern that submits commands directly to a resource such as e.g. <code>/offers/546534534</code><ul>
+<li>according to the RFC, the <code>POST</code> method is for not idempotent operations</li>
+<li>no guarantee on the API level that the business logic will be executed only once</li>
+</ul>
+</li>
+<li>sending command UUID's in a header<ul>
+<li>this pattern is incompatible with REST and the HTTP RFC which states that non-standard headers are deprecated</li>
+<li>does not solve all the problems that the PUT and UUID in URI pattern solves</li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.efa0ade1.min.js"></script>
+      
+    
+  </body>
+</html>
