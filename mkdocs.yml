@@ -1,7 +1,19 @@
 site_name: Allegro REST API Design Guidelines
-theme: readthedocs
+theme:
+  name: material
+  palette:
+    - scheme: default
+extra_css:
+  - style.css
 
-docs_dir: ./legacy-docs
+docs_dir: ./docs
 
 nav:
-    - Home: 'index.md'
+  - Introduction: 'index.md'
+  - Resource: 'Resource.md'
+  - Representation: 'Representation.md'
+  - Error: 'Error.md'
+  - Command pattern: 'Command pattern.md'
+  - Documentation: 'Documentation.md'
+  - Glossary: 'Glossary.md'
+  - HATEOAS: 'HATEOAS.md'
