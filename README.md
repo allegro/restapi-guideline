@@ -1,8 +1,7 @@
-[![Documentation Status](http://readthedocs.org/projects/allegro-restapi-guideline/badge/?version=latest)](http://allegro-restapi-guideline.readthedocs.io/en/latest/?badge=latest)
-
 # Allegro REST API Design Guidelines
 
-The purpose of this document is to keep Allegro Public REST API implementations as consistent as possible. The document is addressed to developers who:
+The purpose of this document is to keep Allegro Public REST API implementations as consistent as possible. The document
+is addressed to developers who:
 
 * design REST APIs for micro-services
 * create applications that consume these APIs.
@@ -15,10 +14,9 @@ These guidelines apply to all REST APIs, in particular:
 We publish this document in order to:
 
 * help you to understand the principles behind our REST API design if you are a developer/administrator
-who wants to interact with the API provided by Allegro Public REST API or micro-services,
+  who wants to interact with the API provided by Allegro Public REST API or micro-services,
 * ensure consistency between your service and the Allegro REST API if you are developing a service consuming a REST API,
 * hear your feedback.
-
 
 ## Allegro REST API
 
@@ -28,7 +26,8 @@ Allegro REST API is a new API interface that will integrate the Allegro platform
 * Allegro Mobile Applications,
 * frontend / web applications.
 
-We are providing you with Allegro REST API, while we try to deliver truly RESTful API interface with positive developer experience (DX).
+We are providing you with Allegro REST API, while we try to deliver truly RESTful API interface with positive developer
+experience (DX).
 
 Resources that will contribute to Allegro REST API will be provided by micro-services.
 
@@ -51,7 +50,6 @@ The six constraints are:
 * [Layered System](http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#fig_5_7)
 * [Code on Demand (optional)](http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#fig_5_8)
 
-
 The uniform interface constraint is fundamental to the design of any REST service.
 The uniform interface simplifies and decouples the architecture, which enables each part to evolve independently.
 
@@ -61,7 +59,8 @@ The four constraints concerning uniform interface are:
 
 Individual resources are identified in requests, for example using URIs in web-based REST systems.
 The resources themselves are conceptually separate from the representations that are returned to the client.
-For example, the server may send data from its database as HTML, XML or JSON, none of which are the server's internal representation.
+For example, the server may send data from its database as HTML, XML or JSON, none of which are the server's internal
+representation.
 
 **Manipulation of resources through these representations**
 
@@ -76,10 +75,12 @@ Responses also explicitly indicate their cache-ability.
 
 **Hypermedia as the engine of application state (HATEOAS)**
 
-Clients deliver state via body contents, query-string parameters, request headers and the requested URI (the resource name).
+Clients deliver state via body contents, query-string parameters, request headers and the requested URI (the resource
+name).
 Services deliver state to clients via body content, response codes, and response headers.
 This is technically referred to as hypermedia (or hyperlinks within hypertext).
-Aside from the description above, HATEOS also means that, where necessary, links are contained in the returned body (or headers)
+Aside from the description above, HATEOS also means that, where necessary, links are contained in the returned body (or
+headers)
 to supply the URI for retrieval of the object itself or related objects. We will talk about this in more detail later.
 
 If a service violates any of the required constraints, **it cannot be considered RESTful**.
@@ -94,75 +95,74 @@ One of the key principles of good API design is that an interface must provide a
 and user-friendly developer experience (DX) if it is to facilitate the creation of applications
 that add value to the API owner’s business.
 
-
 # Contents
 
 * [Resource](#resource)
-	* [Name](#name)
-	* [Identification (UU)IDs](#identification-uuids)
-	* [Lowercase paths](#lowercase-paths)
-	* [Minimize resources nesting](#minimize-resources-nesting)
-	* [Beta resources](#beta-resources)
-	* [Versioning](#versioning)
-		* [Beta version](#beta-version)
-	* [Views](#views)
-	* [User Agent Header](#user-agent-header)
-		* [Identifying your client](#identifying-your-client)
-	* [Use HTTP methods to operate on collections and entities](#use-http-methods-to-operate-on-collections-and-entities)
-		* [Update and create must return a resource representation](#update-and-create-must-return-a-resource-representation)
-		* [Create entity](#create-entity)
-		* [List entities (collection)](#list-entities-collection)
-		* [Get selected entity](#get-selected-entity)
-		* [Update entity](#update-entity)
-		* [Delete entity](#delete-entity)
-	* [Return appropriate status codes](#return-appropriate-status-codes)
-	* [Validate request parameters](#validate-request-parameters)
-		* [Validate errors](#validate-errors)
-		* [Validate selected fields](#validate-selected-fields)
+    * [Name](#name)
+    * [Identification (UU)IDs](#identification-uuids)
+    * [Lowercase paths](#lowercase-paths)
+    * [Minimize resources nesting](#minimize-resources-nesting)
+    * [Beta resources](#beta-resources)
+    * [Versioning](#versioning)
+        * [Beta version](#beta-version)
+    * [Views](#views)
+    * [User Agent Header](#user-agent-header)
+        * [Identifying your client](#identifying-your-client)
+    * [Use HTTP methods to operate on collections and entities](#use-http-methods-to-operate-on-collections-and-entities)
+        * [Update and create must return a resource representation](#update-and-create-must-return-a-resource-representation)
+        * [Create entity](#create-entity)
+        * [List entities (collection)](#list-entities-collection)
+        * [Get selected entity](#get-selected-entity)
+        * [Update entity](#update-entity)
+        * [Delete entity](#delete-entity)
+    * [Return appropriate status codes](#return-appropriate-status-codes)
+    * [Validate request parameters](#validate-request-parameters)
+        * [Validate errors](#validate-errors)
+        * [Validate selected fields](#validate-selected-fields)
 * [Representation](#representation)
-	* [Property name format](#property-name-format)
-	* [Provide resource (UU)IDs](#provide-resource-uuids)
-	* [Null values](#null-values)
-	* [Empty collections](#empty-collections)
-	* [Use UTC times formatted in ISO8601](#use-utc-times-formatted-in-iso8601)
-	* [Time without date](#time-without-date)
-	* [Country, language and translations](#country-language-and-translations)
-		* [Value representation](#value-representation)
-		* [Translations](#translations)
-	* [Price and currency](#price-and-currency)
-	* [Enum values](#enum-values)
-	* [Nesting foreign resources relations](#nesting-foreign-resources-relations)
-	* [Provide full resources where available](#provide-full-resources-where-available)
-	* [Accept JSON in request bodies](#accept-json-in-request-bodies)
-	* [Keep JSON response minified](#keep-json-response-minified)
-	* [Filtering](#filtering)
-		* [Simple filters in query string](#simple-filters-in-query-string)
-		* [Filter by multiple values in one filed](#filter-by-multiple-values-in-one-filed)
-		* [Advanced filtering (similar to search) concerning many parameters and nested structures](#advanced-filtering-similar-to-search-concerning-many-parameters-and-nested-structures)
-	* [Sorting](#sorting)
-	* [Wrap collection in object](#wrap-collection-in-object)
-	* [Consistent paging scheme](#consistent-paging-scheme)
-	* [Keep response gziped](#keep-response-gziped)
+    * [Property name format](#property-name-format)
+    * [Provide resource (UU)IDs](#provide-resource-uuids)
+    * [Null values](#null-values)
+    * [Empty collections](#empty-collections)
+    * [Use UTC times formatted in ISO8601](#use-utc-times-formatted-in-iso8601)
+    * [Time without date](#time-without-date)
+    * [Country, language and translations](#country-language-and-translations)
+        * [Value representation](#value-representation)
+        * [Translations](#translations)
+    * [Price and currency](#price-and-currency)
+    * [Enum values](#enum-values)
+    * [Nesting foreign resources relations](#nesting-foreign-resources-relations)
+    * [Provide full resources where available](#provide-full-resources-where-available)
+    * [Accept JSON in request bodies](#accept-json-in-request-bodies)
+    * [Keep JSON response minified](#keep-json-response-minified)
+    * [Filtering](#filtering)
+        * [Simple filters in query string](#simple-filters-in-query-string)
+        * [Filter by multiple values in one filed](#filter-by-multiple-values-in-one-filed)
+        * [Advanced filtering (similar to search) concerning many parameters and nested structures](#advanced-filtering-similar-to-search-concerning-many-parameters-and-nested-structures)
+    * [Sorting](#sorting)
+    * [Wrap collection in object](#wrap-collection-in-object)
+    * [Consistent paging scheme](#consistent-paging-scheme)
+    * [Keep response gziped](#keep-response-gziped)
 * [Error](#error)
-	* [Provide Trace-Ids for Introspection](#provide-trace-ids-for-introspection)
-	* [Generate structured errors](#generate-structured-errors)
+    * [Provide Trace-Ids for Introspection](#provide-trace-ids-for-introspection)
+    * [Generate structured errors](#generate-structured-errors)
 * [Command pattern](#command-pattern)
-	* [Problem](#problem)
-	* [Solution](#solution)
-		* [Adding the command](#adding-the-command)
-		* [Checking execution status (optionally)](#checking-execution-status-optionally)
-	* [Antypatterns replaced by this pattern](#antypatterns-replaced-by-this-pattern)
+    * [Problem](#problem)
+    * [Solution](#solution)
+        * [Adding the command](#adding-the-command)
+        * [Checking execution status (optionally)](#checking-execution-status-optionally)
+    * [Antypatterns replaced by this pattern](#antypatterns-replaced-by-this-pattern)
 * [Documentation](#documentation)
 * [Glossary](#glossary)
-	* [General](#general)
-	* [Address](#address)
-	* [Image](#image)
-	* [Description](#description)
-	* [Category](#category)
-	* [User](#user)
-	* [Coordinates](#coordinates)
-	* [Pagination](#pagination)
-	* [Try to avoid](#try-to-avoid)
+    * [General](#general)
+    * [Address](#address)
+    * [Image](#image)
+    * [Description](#description)
+    * [Category](#category)
+    * [User](#user)
+    * [Coordinates](#coordinates)
+    * [Pagination](#pagination)
+    * [Try to avoid](#try-to-avoid)
 * [HATEOAS](#hateoas)
 
 # Resource
@@ -170,6 +170,7 @@ that add value to the API owner’s business.
 ## Name
 
 Use the plural version of a resource name to be consistent when referring to particular resources, e.g.:
+
 ```
 /users
 /offers
@@ -207,7 +208,18 @@ In data models with nested parent/child resource relationships, paths
 may become deeply nested, e.g.:
 
 ```javascript
-/users/{userId}/offers/{offerId}/shipments/{shipmentId}
+/users/
+{
+    userId
+}
+/offers/
+{
+    offerId
+}
+/shipments/
+{
+    shipmentId
+}
 ```
 
 Limit nesting depth by preferring to locate resources at the root
@@ -215,11 +227,28 @@ path. Use nesting to indicate scoped collections. For example, for the
 case above where shipping belongs to an offer:
 
 ```javascript
-/users/{userId}
-/users/{userId}/offers
-/offers/{offerId}
-/offers/{offerId}/shipments
-/shipments/{shipmentId}
+/users/
+{
+    userId
+}
+/users/
+{
+    userId
+}
+/offers
+/offers/
+{
+    offerId
+}
+/offers/
+{
+    offerId
+}
+/shipments
+/shipments/
+{
+    shipmentId
+}
 ```
 
 ## Beta resources
@@ -230,11 +259,14 @@ Beta version resources can change continuously and affect compatibility of curre
 Beta resources rules:
 
 * Numbers added to beta version resources are +1 compared to the numbers of current resources.
-Moreover, “public” is replaced with “beta”, e.g. if resources or users are marked as application/vnd.allegro.public.v1+json,
-then in beta version the same resources will be marked as application/vnd.allegro.beta.v2+json,
-* Within a given version, beta resources can be subject to modifications. As a result, we do not recommend the production use of beta resources,
+  Moreover, “public” is replaced with “beta”, e.g. if resources or users are marked as
+  application/vnd.allegro.public.v1+json,
+  then in beta version the same resources will be marked as application/vnd.allegro.beta.v2+json,
+* Within a given version, beta resources can be subject to modifications. As a result, we do not recommend the
+  production use of beta resources,
 * When completing a beta resource , enter it into the API with a suitable beta number, e.g. if you complete your work,
-resources or users marked as application/vnd.allegro.beta.v2+json will be entered into the API as application/vnd.allegro.public.v2+json.
+  resources or users marked as application/vnd.allegro.beta.v2+json will be entered into the API as
+  application/vnd.allegro.public.v2+json.
 
 ## Versioning
 
@@ -242,9 +274,12 @@ To prevent unexpected, breaking changes to users, ask for providing a suitable v
 
 **Avoid default versions as it can change in the future.**
 
-To specify version use custom media type and [+json Structured Syntax Suffix](https://tools.ietf.org/html/rfc6839#page-4) i.e. `application/vnd.allegro.public.v1+json`.
+To specify version use custom media type
+and [+json Structured Syntax Suffix](https://tools.ietf.org/html/rfc6839#page-4)
+i.e. `application/vnd.allegro.public.v1+json`.
 Each request must specify its version by setting up `Accept` or `Content-type` properly.
-The header depends on method semantics e.g.: GET methods usually expect `Accept` header, POST methods usually expect` Content-type` header and PUT methods usually expect both headers.
+The header depends on method semantics e.g.: GET methods usually expect `Accept` header, POST methods usually
+expect` Content-type` header and PUT methods usually expect both headers.
 
 ```
 Content-Type: application/vnd.allegro.public.v1+json
@@ -261,7 +296,8 @@ With jersey you can simply use:
 
 ### Beta version
 
-Beta version resources are marked the same way as described above, but “public” is replaced with “beta” in a media type, e.g. `application/vnd.allegro.beta.v1+json`.
+Beta version resources are marked the same way as described above, but “public” is replaced with “beta” in a media type,
+e.g. `application/vnd.allegro.beta.v1+json`.
 
 ```
 Content-Type: application/vnd.allegro.beta.v1+json
@@ -273,14 +309,19 @@ Accept: application/vnd.allegro.beta.v1+json
 If you need different views of the same object, construct different URLs to distinguish views.
 
 For example: some offer data are available only for seller. To get these private data, add context */sale/* to the path:
+
 ```
 GET /sale/offers
 ```
+
 To get only public data use:
+
 ```
 GET /offers
 ```
+
 To get offers watched by user:
+
 ```
 GET /watched-offers
 ```
@@ -319,13 +360,15 @@ User-Agent: Your-Service-Name/ServiceVersion (your-service-host-id) OSName
 ```
 
 Sample:
+
 ```
 User-Agent: pl.allegro.sale/1.5.0 (Client-Id 01234567-89ab-cdef-0123-456789abcdef) Android/4.0 (Motorola XT1052)
 ```
 
 ## Use HTTP methods to operate on collections and entities
 
-There is one single rule concerning operations performed on collections and entities - **Use [HTTP methods](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html)**
+There is one single rule concerning operations performed on collections and entities - **
+Use [HTTP methods](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html)**
 
 You can operate on resources using HTTP methods such as `POST`, `GET`, `PUT`, and `DELETE` -
 to remember them, refer to the CRUD acronym (Create-Read-Update-Delete).
@@ -335,20 +378,20 @@ to remember them, refer to the CRUD acronym (Create-Read-Update-Delete).
 | /users                 | Create new user  | List users  | Error                  | Error              |
 | /users/{uuid}          | Error            | Get user    | Update user if exists  | Delete user        |
 
-
 ### Update and create must return a resource representation
 
 `PUT` and `POST` methods modify fields of the underlying resource that were not part of the provided parameters
-(for example: `createdAt` or `updatedAt` timestamps). As indicated in the section [Provide full resources where available](#provide-full-resources-where-available),
+(for example: `createdAt` or `updatedAt` timestamps). As indicated in the
+section [Provide full resources where available](#provide-full-resources-where-available),
 to prevent an API consumer from having to hit the API again for an updated representation,
 have the API return the updated (or created) representation as part of the response.
-
 
 ### Create entity
 
 * server requires all entity properties to be located in a request body
 * server returns the `HTTP 201 Created` status code
-* response will also include the `Location` header that points to the URL of the new resource ([RFC 6570](http://tools.ietf.org/html/rfc6570))
+* response will also include the `Location` header that points to the URL of the new
+  resource ([RFC 6570](http://tools.ietf.org/html/rfc6570))
 * server returns the new entity in the established version (see [Versioning section](#versioning))
 
 Sample request:
@@ -385,18 +428,17 @@ Sample response:
 }
 ```
 
-
 ### List entities (collection)
 
 * server returns the `HTTP 200 Ok` status code
-* response collection is presented as an array (in the established version) in a field bearing the same name as the resource ([Wrap collection in object](#wrap-collection-in-object))
+* response collection is presented as an array (in the established version) in a field bearing the same name as the
+  resource ([Wrap collection in object](#wrap-collection-in-object))
 
 Sample request:
 
 ```bash
 curl https://api.allegro.pl/users -H "Accept: application/vnd.allegro.public.v1+json"
 ```
-
 
 ### Get selected entity
 
@@ -408,7 +450,6 @@ Sample request:
 ```bash
 curl https://api.allegro.pl/users/{id} -H "Accept: application/vnd.allegro.public.v1+json"
 ```
-
 
 ### Update entity
 
@@ -446,21 +487,21 @@ Sample response:
 }
 ```
 
-In the example above,  a nick name is changed to "Zed" and a middle name is left empty (assuming that the field `middleName` is optional).
-
+In the example above, a nick name is changed to "Zed" and a middle name is left empty (assuming that the
+field `middleName` is optional).
 
 ### Delete entity
 
 * server returns the `HTTP 204 No Content` status code
 * response body content is empty
-* no need for `Accept` header (outcome of the Delete method should not be versioned, except for special cases – see [Versioning section](#versioning))
+* no need for `Accept` header (outcome of the Delete method should not be versioned, except for special cases –
+  see [Versioning section](#versioning))
 
 Sample request:
 
 ```bash
 curl -X DELETE https://api.allegro.pl/users/{id}
 ```
-
 
 ## Return appropriate status codes
 
@@ -471,8 +512,9 @@ Responses concerning successful operations should be coded according to the foll
 
 * `200 Ok`: Response to a successful `GET`, `PUT`, `PATCH` request. An existing resource is updated synchronously.
 * `201 Created`: Response to a `POST` request that results in entity creation.
-It should be combined with a `Location` header pointing to the location of the new resource.
-* `202 Accepted`: Accepted request concerning a `POST`, `PUT`, `DELETE`, or `PATCH` request that will be processed asynchronously.
+  It should be combined with a `Location` header pointing to the location of the new resource.
+* `202 Accepted`: Accepted request concerning a `POST`, `PUT`, `DELETE`, or `PATCH` request that will be processed
+  asynchronously.
 * `204 No Content`: Response to a successful request that will return empty body (as a `DELETE` request)
 * `304 Not Modified`: Used when HTTP caching headers are in use (e.g. etags)
 
@@ -487,7 +529,8 @@ Return suitable codes to provide additional information in case of errors:
 * `404 Not Found`: Requesting for a resource that does not exist
 * `405 Method Not Allowed`: Requested HTTP method is not available for a given resource
 * `406 Not Acceptable`: Missing or incorrect `Accept` header was provided as part of the request
-* `410 Gone`: Indicates that the resource is no longer available. Useful as a blanket response for old API resource versions
+* `410 Gone`: Indicates that the resource is no longer available. Useful as a blanket response for old API resource
+  versions
 * `415 Unsupported Media Type`: If incorrect `Content-type` header was provided as part of the request
 * `422 Unprocessable Entity`: Used for validation errors – request was understood, but contained invalid parameters
 * `429 Too Many Requests`: When a request is rejected due to rate limiting
@@ -495,7 +538,8 @@ Return suitable codes to provide additional information in case of errors:
 * `501 Not Implemented`: This feature is not ready yet
 * `502 Bad Gateway`: Something is wrong with the server
 * `503 Service Unavailable`: Unable to connect to the service
-* `504 Gateway Timeout`: Something is wrong with the  network layer (Load balancer or Edge service cannot connect to the service because of timeout)
+* `504 Gateway Timeout`: Something is wrong with the network layer (Load balancer or Edge service cannot connect to the
+  service because of timeout)
 
 ## Validate request parameters
 
@@ -524,21 +568,22 @@ Sample error validation response:
 
 ```json
 {
-	"errors": [
-	    {
-	        "message": "Provided email address does not match pattern",
-	        "code": "EmailFormatNotValidException",
-	        "details": null,
-	        "path": "email",
-	        "userMessage": "Pole password musi zawierać małe i duże litery oraz przynajmniej jedną cyfrę."
-	    }
-    ]
+  "errors": [
+    {
+      "message": "Provided email address does not match pattern",
+      "code": "EmailFormatNotValidException",
+      "details": null,
+      "path": "email",
+      "userMessage": "Pole password musi zawierać małe i duże litery oraz przynajmniej jedną cyfrę."
+    }
+  ]
 }
 ```
 
 ### Validate selected fields
 
-Use `include` in query string to specify what parameters you want to validate, e.g. to validate only `login` and `password` fields, use `include=login&include=password`:
+Use `include` in query string to specify what parameters you want to validate, e.g. to validate only `login`
+and `password` fields, use `include=login&include=password`:
 
 ```bash
 curl -X POST https://api.allegro.pl/users?dryRun=true&include=login&include=password  \
@@ -553,9 +598,7 @@ Sample response:
 Response status 204 No Content
 ```
 
-
 # Representation
-
 
 ## Property name format
 
@@ -563,22 +606,34 @@ Property names should be meaningful.
 Use camel case in parameters and properties (e.g. `firstName`) instead of underscoring (e.g. `first_name`):
 
 ```javascript
-"firstName": "John",
-"lastName": "Smith"
+"firstName"
+:
+"John",
+    "lastName"
+:
+"Smith"
 ```
 
 Array types should have plural property names. All other property names should be singular.
 
 ```javascript
 {
-  // Singular
-  "user": "123456",
-  // An array of siblings, plural
-  "offers": [{},{}],
-  // "totalItem" doesn't sound right
-  "totalCount": 10,
-  // But maybe "offersCount" or just "count" is better
-  "offersCount": 10,
+    // Singular
+    "user"
+:
+    "123456",
+        // An array of siblings, plural
+        "offers"
+:
+    [{}, {}],
+        // "totalItem" doesn't sound right
+        "totalCount"
+:
+    10,
+        // But maybe "offersCount" or just "count" is better
+        "offersCount"
+:
+    10,
 }
 ```
 
@@ -592,43 +647,53 @@ service, in particular auto-incrementing IDs.
 Render UUIDs as a lowercase string in `8-4-4-4-12` format, e.g.:
 
 ```javascript
-"id": "01234567-89ab-cdef-0123-456789abcdef"
+"id"
+:
+"01234567-89ab-cdef-0123-456789abcdef"
 ```
 
 ## Null values
 
-Blank fields are generally included as `null` instead of being blank strings or omitted. If a property state or value is unknown, consider setting the property to `null`.
+Blank fields are generally included as `null` instead of being blank strings or omitted. If a property state or value is
+unknown, consider setting the property to `null`.
 
 Example of an unknown value or state:
+
 ```javascript
 {
-  // ...
-  "buyerAddresses":[
+    // ...
+    "buyerAddresses"
+:
+    [
         {
-           "type":1,
-           "company":null,
-           "name":"Jaś Fasola",
-           "street":"Zakręt 56",
-           "postCode":"00-999",
-           "city":"Lądek Zdrój",
-           "province":"Pomorskie"
+            "type": 1,
+            "company": null,
+            "name": "Jaś Fasola",
+            "street": "Zakręt 56",
+            "postCode": "00-999",
+            "city": "Lądek Zdrój",
+            "province": "Pomorskie"
         }
-     ],
-  // ...
+    ],
+    // ...
 }
 ```
 
 ## Empty collections
 
-If you want to return empty collection, return `[]` instead of `null`. Some client frameworks cannot iterate over `null` and need extra null checking.  Iteration over `[]` is always possible. e.g.:
+If you want to return empty collection, return `[]` instead of `null`. Some client frameworks cannot iterate over `null`
+and need extra null checking. Iteration over `[]` is always possible. e.g.:
 
 ```javascript
 {
-	"status": "OK",
-	"errors": []
+    "status"
+:
+    "OK",
+        "errors"
+:
+    []
 }
 ```
-
 
 ## Use UTC times formatted in ISO8601
 
@@ -637,10 +702,14 @@ e.g.:
 
 ```javascript
 {
-  // ...
-  "createdAt": "2012-01-01T12:00:00.000Z",
-  "updatedAt": "2012-01-01T13:00:00.000Z",
-  // ...
+    // ...
+    "createdAt"
+:
+    "2012-01-01T12:00:00.000Z",
+        "updatedAt"
+:
+    "2012-01-01T13:00:00.000Z",
+    // ...
 }
 ```
 
@@ -653,17 +722,20 @@ Render time value as a string in format (HH:mm:ss.SSS) without time zone informa
 "to": "16:00:00.000"
 ```
 
-There is no need to add information about a time zone – a client should present value received from an API without any modification.
+There is no need to add information about a time zone – a client should present value received from an API without any
+modification.
 If you need to present time in a specific time zone, use UTC for full date and time.
 
 ## Country, language and translations
 
 ### Value representation
 
-If you need to send some property that indicates a country then use the [ISO 3166 Alpha-2](http://en.wikipedia.org/wiki/ISO_3166-1#Current_codes)
+If you need to send some property that indicates a country then use
+the [ISO 3166 Alpha-2](http://en.wikipedia.org/wiki/ISO_3166-1#Current_codes)
 codes for that - 2 letters, always upper-cased.
 
 Sample JSON with such a property:
+
 ```
 {
     "address" : {
@@ -679,6 +751,7 @@ language tag. It combines the previously mentioned [ISO 3166](http://en.wikipedi
 [ISO 639](https://en.wikipedia.org/wiki/ISO_639) language names.
 
 Sample JSON with such a property:
+
 ```
 {
     "user" : {
@@ -691,8 +764,8 @@ Sample JSON with such a property:
 Java sample for [Locale](https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html) supporting these formats:
 
 ```java
-Locale locale = Locale.forLanguageTag("en-GB");
-String countryCode = locale.getCountry();
+Locale locale=Locale.forLanguageTag("en-GB");
+        String countryCode=locale.getCountry();
 // countryCode == "GB"
 ```
 
@@ -703,8 +776,10 @@ compatible update to the previously mentioned [RFC 1766](http://tools.ietf.org/h
 
 In the section above we presented how the values of country and language references should be
 represented in JSON, query params, etc. Translating user messages for the client is a different topic.
-The HTTP standard defines an appropriate header for that: `Accept-Language` [RFC 2616, 14.4](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4).
-If the client desires to receive localized user messages in the response, it should set the `Accept-Language` header in its request.
+The HTTP standard defines an appropriate header for
+that: `Accept-Language` [RFC 2616, 14.4](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4).
+If the client desires to receive localized user messages in the response, it should set the `Accept-Language` header in
+its request.
 
 This is required to handle at least two types of "Accept-Language" :
 
@@ -718,27 +793,37 @@ and
 Accept-Language: pl-PL
 ````
 
-By sending the information presented above, you will inform the backing service that all user messages (including [error](#error) messages) should be translated to English or Polish, respectively. If "Accept-Language" header is omitted or set to an unsupported value then the language should fallback to en-US.
+By sending the information presented above, you will inform the backing service that all user messages (
+including [error](#error) messages) should be translated to English or Polish, respectively. If "Accept-Language" header
+is omitted or set to an unsupported value then the language should fallback to en-US.
 
 ## Price and currency
 
-All prices (included in response and request bodies) are requested and returned as a structure with `amount` and `currency`
+All prices (included in response and request bodies) are requested and returned as a structure with `amount`
+and `currency`
 fields as proposed by [paypal](https://developer.paypal.com/docs/api/#common-objects-for-payouts), e.g.
 
 ```javascript
 {
-    "buyNow": {
-        "amount": "11.25",
-        "currency": "PLN"
+    "buyNow"
+:
+    {
+        "amount"
+    :
+        "11.25",
+            "currency"
+    :
+        "PLN"
     }
 }
 ```
 
 * `currency` - 3 letter currency code as defined in [ISO 4217](http://en.wikipedia.org/wiki/ISO_4217#Active_codes)
 * `amount` - string representation, at least one digit before a decimal separator **without the thousands separator**,
-then **dot (.)** as a decimal separator, then **at most** two digits after the decimal separator.
+  then **dot (.)** as a decimal separator, then **at most** two digits after the decimal separator.
 
-Such a method of presenting `amount` makes the interpretation easier, provides with precision and protects against rounding errors.
+Such a method of presenting `amount` makes the interpretation easier, provides with precision and protects against
+rounding errors.
 
 Some `amount` examples:
 
@@ -768,11 +853,11 @@ Java code:
 
 ```java
 public enum Color {
-  WHITE,
-  BLACK,
-  RED,
-  YELLOW,
-  BLUE
+    WHITE,
+    BLACK,
+    RED,
+    YELLOW,
+    BLUE
 }
 ```
 
@@ -780,23 +865,37 @@ JSON Object:
 
 ```javascript
 {
-  "color": "WHITE"
+    "color"
+:
+    "WHITE"
 }
 ```
 
 ## Nesting foreign resources relations
 
-Nest foreign resources references, even if the only information is `id` of the object referred to, with a nested object, e.g.:
+Nest foreign resources references, even if the only information is `id` of the object referred to, with a nested object,
+e.g.:
 
 ```javascript
 {
-  "id": "01234567-89ab-cdef-0123-456789abcdef",
-  "name": "offer-name",
-  "seller": {
-    "id": "5d8201b0...",
-    "name": "user-name"
-  },
-  // ...
+    "id"
+:
+    "01234567-89ab-cdef-0123-456789abcdef",
+        "name"
+:
+    "offer-name",
+        "seller"
+:
+    {
+        "id"
+    :
+        "5d8201b0...",
+            "name"
+    :
+        "user-name"
+    }
+,
+    // ...
 }
 ```
 
@@ -804,11 +903,19 @@ Instead of a flat structure e.g.:
 
 ```javascript
 {
-  "id": "01234567-89ab-cdef-0123-456789abcdef",
-  "name": "offer-name",
-  "sellerId": "5d8201b0...",
-  "sellerName": "user-name"
-  // ...
+    "id"
+:
+    "01234567-89ab-cdef-0123-456789abcdef",
+        "name"
+:
+    "offer-name",
+        "sellerId"
+:
+    "5d8201b0...",
+        "sellerName"
+:
+    "user-name"
+    // ...
 }
 ```
 
@@ -818,14 +925,27 @@ or introduce more top-level response fields, e.g.:
 
 ```javascript
 {
-  "id": "01234567-89ab-cdef-0123-456789abcdef",
-  "name": "offer-name",
-  "seller": {
-    "id": "5d8201b0...",
-    "name": "user-name",
-    "email": "user@allegrogroup.com"
-  },
-  // ...
+    "id"
+:
+    "01234567-89ab-cdef-0123-456789abcdef",
+        "name"
+:
+    "offer-name",
+        "seller"
+:
+    {
+        "id"
+    :
+        "5d8201b0...",
+            "name"
+    :
+        "user-name",
+            "email"
+    :
+        "user@allegrogroup.com"
+    }
+,
+    // ...
 }
 ```
 
@@ -847,9 +967,13 @@ curl -X POST https://api.allegro.pl/users \
 
 ```javascript
 {
-  "id": "01234567-89ab-cdef-0123-456789abcdef",
-  "name": "user-name",
-  // ...
+    "id"
+:
+    "01234567-89ab-cdef-0123-456789abcdef",
+        "name"
+:
+    "user-name",
+    // ...
 }
 ```
 
@@ -860,8 +984,14 @@ clients (e.g. web browsers) will automatically "improve" JSON
 output. It is best to keep JSON responses minified e.g.:
 
 ```json
-{"id": "01234567-89ab-cdef-0123-456789abcdef","name":"offer-name","seller":{"id":"5d8201b0...",
-"name":"user-name","email":"user@allegrogroup.com"}
+{
+  "id": "01234567-89ab-cdef-0123-456789abcdef",
+  "name": "offer-name",
+  "seller": {
+    "id": "5d8201b0...",
+    "name": "user-name",
+    "email": "user@allegrogroup.com"
+  }
 }
 ```
 
@@ -880,10 +1010,13 @@ Instead of e.g.:
 ```
 
 ## Filtering
+
 ### Simple filters in query string
 
-Use a query parameter for each field that supports filtering (most of them probably do not provide such support; you should document what fields are filterable).
-For example, when submitting a request for a list of general delivery points to the `/general-deliveries` endpoint, you may want to limit them to the given name and city.
+Use a query parameter for each field that supports filtering (most of them probably do not provide such support; you
+should document what fields are filterable).
+For example, when submitting a request for a list of general delivery points to the `/general-deliveries` endpoint, you
+may want to limit them to the given name and city.
 To do so, use a request such as:
 
 ```bash
@@ -922,7 +1055,7 @@ To support ranges in filtering use virtual fields with suffixes :
 - **gte** - greater or equal
 - **lte** - less or equal
 
-Example request: 
+Example request:
 
 ````bash
 curl -X GET https://api.allegro.pl/general-deliveries?rate.gt=200 -H "Accept: application/vnd.allegro.public.v1+json"
@@ -930,88 +1063,93 @@ curl -X GET https://api.allegro.pl/general-deliveries?rate.gt=200 -H "Accept: ap
 
 ### Filter by multiple values in one filed
 
-If you want to filter many values in one field, you should repeat the field name many times in URL adding different values, e.g.
+If you want to filter many values in one field, you should repeat the field name many times in URL adding different
+values, e.g.
 to filter shipping payments in `PRE` and `POST` values use:
 
 ```bash
 curl -X GET https://api.allegro.pl/general-deliveries?shipments.payments=PRE&shipments.payments=POST -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
-This type of convention, i.e. `shipments.payments=PRE&shipments.payments=POST` is supported by many frameworks out of the box.
-
-
+This type of convention, i.e. `shipments.payments=PRE&shipments.payments=POST` is supported by many frameworks out of
+the box.
 
 ### Advanced filtering (similar to search) concerning many parameters and nested structures
+
 For advanced filtering:
 
-* create search id from your data – sending `POST` body to "new resource" (e.g. `/product-searches`) will return search id (in `Location` header) for a query
-* get collection for search id – use search id returned after the operation mentioned above to get expected collection of entities by calling base resource (e.g. `/products?search.id=`)
-* get search data for search id – use search id returned after the operation mentioned above to get search data by calling "new resource" (e.g. `/product-searches`)
+* create search id from your data – sending `POST` body to "new resource" (e.g. `/product-searches`) will return search
+  id (in `Location` header) for a query
+* get collection for search id – use search id returned after the operation mentioned above to get expected collection
+  of entities by calling base resource (e.g. `/products?search.id=`)
+* get search data for search id – use search id returned after the operation mentioned above to get search data by
+  calling "new resource" (e.g. `/product-searches`)
 
 Rules:
 
-* "new resource" should be presented in `/*-searches` convention where the base resource name is singular, e.g. in case of `/products` it should be named `/product-searches`
+* "new resource" should be presented in `/*-searches` convention where the base resource name is singular, e.g. in case
+  of `/products` it should be named `/product-searches`
 * entity in a request `POST` body in `/*-searches` (e.g. `/product-searches`)
 * handle query string parameter `search.id` in base resource (e.g. `/products`) to handle filters
 * entities created by a "new resource" should be versioned as the base resource – it should be possible to get a
-suitable version of `/product-searches` resource using any `search.id` for each new version of e.g. `/products` resource
+  suitable version of `/product-searches` resource using any `search.id` for each new version of e.g. `/products`
+  resource
 * the new resource version should not break backward compatibility (if possible)
 
 Sample entities in `/products` collection
 
 ```json
 {
-    "products": [
+  "products": [
+    {
+      "id": "7d3e4d5a-817c-45f8-930b-e319dbcedc5c",
+      "name": "Doładowanie Heyah 5 zł",
+      "parameterGroups": [
         {
-            "id": "7d3e4d5a-817c-45f8-930b-e319dbcedc5c",
-            "name": "Doładowanie Heyah 5 zł",
-            "parameterGroups": [
-                {
-                    "id": "4be770c3-6805-4967-8f13-0457dc8ed446",
-                    "name": "Bazowe informacje",
-                    "parameters": [
-                        {
-                            "id": "ce87a49d-55c3-476c-b7f8-349dfaf89510",
-                            "name": "Rodzaj usługi",
-                            "values": [
-                                "Doładowanie"
-                            ]
-                        },
-                        {
-                            "id": "63baaaf2-534a-4c20-b1ed-e44952d7e556",
-                            "name": "Nazwa",
-                            "values": [
-                                "Doładowanie Heyah 5 zł"
-                            ]
-                        },
-                        {
-                            "id": "ab98c5ec-f9c6-440f-9af0-a19caaba7eca",
-                            "name": "Operator",
-                            "values": [
-                                "Heyah"
-                            ]
-                        },
-                        {
-                            "id": "7fdd3aa4-3cab-4d4f-93c4-9c2ff05bec86",
-                            "name": "Wartość doładowania",
-                            "values": [
-                                "5 zł"
-                            ]
-                        }
-                    ]
-                }
-            ]
+          "id": "4be770c3-6805-4967-8f13-0457dc8ed446",
+          "name": "Bazowe informacje",
+          "parameters": [
+            {
+              "id": "ce87a49d-55c3-476c-b7f8-349dfaf89510",
+              "name": "Rodzaj usługi",
+              "values": [
+                "Doładowanie"
+              ]
+            },
+            {
+              "id": "63baaaf2-534a-4c20-b1ed-e44952d7e556",
+              "name": "Nazwa",
+              "values": [
+                "Doładowanie Heyah 5 zł"
+              ]
+            },
+            {
+              "id": "ab98c5ec-f9c6-440f-9af0-a19caaba7eca",
+              "name": "Operator",
+              "values": [
+                "Heyah"
+              ]
+            },
+            {
+              "id": "7fdd3aa4-3cab-4d4f-93c4-9c2ff05bec86",
+              "name": "Wartość doładowania",
+              "values": [
+                "5 zł"
+              ]
+            }
+          ]
         }
-    ]
+      ]
+    }
+  ]
 }
 ```
-
 
 Let’s assume you are looking for `products` with:
 
 * `parameterGroups.id` with value `4be770c3-6805-4967-8f13-0457dc8ed446`
 * dynamic parameters with many values, e.g. a dynamic parameter of `id` `ce87a49d-55c3-476c-b7f8-349dfaf89510`
-with `value` `Doładowanie` and parameters of `id` `ab98c5ec-f9c6-440f-9af0-a19caaba7eca` with `value` `Heyah`
+  with `value` `Doładowanie` and parameters of `id` `ab98c5ec-f9c6-440f-9af0-a19caaba7eca` with `value` `Heyah`
 
 you can submit a request for `/product-searches`:
 
@@ -1042,17 +1180,18 @@ curl -X POST https://api.allegro.pl/product-searches -H "Accept: application/vnd
 }
 ```
 
-In the sample above server should write down the version of search data used to create it from the `Accept` header – `application/vnd.allegro.public.v1+json`.
+In the sample above server should write down the version of search data used to create it from the `Accept` header
+– `application/vnd.allegro.public.v1+json`.
 It will improve the process of mapping from one search data version to another in the future.
 
-In return, you get an id for the created "search" (in `Location` header, status `HTTP 201 Created`), which holds your search results. To view them, provide:
+In return, you get an id for the created "search" (in `Location` header, status `HTTP 201 Created`), which holds your
+search results. To view them, provide:
 
 ```bash
 curl -X GET https://api.allegro.pl/product-searches/4be770c3-4967-6805-8f13-0457dc8ed446 -H "Accept: application/vnd.allegro.public.v1+json"
 ```
 
 Important note:  There is no way to override filters for a given id - you must create a new search resource.
-
 
 Use `search.id` parameter to get filtered collection of entities with a sort parameter such as:
 
@@ -1063,31 +1202,35 @@ curl -X GET https://api.allegro.pl/products?search.id=4be770c3-4967-6805-8f13-04
 ## Sorting
 
 Sorting: A generic parameter `sort` can be used to describe sorting rules.
-Adjust complex sorting requirements by letting the sort parameter take in a list of comma separated fields, each with a possible unary negative to imply descending sort order.
+Adjust complex sorting requirements by letting the sort parameter take in a list of comma separated fields, each with a
+possible unary negative to imply descending sort order.
 Let's look at some examples:
 
 * `GET /offers?sort=-buyNow` – Retrieves a list of offers put in a descending order by buyNow price
-* `GET /offers?sort=-buyNow,createdAt` – Retrieves a list of offers put in a descending order by buyNow price. Within a specific buyNow price, older offers are presented as first.
+* `GET /offers?sort=-buyNow,createdAt` – Retrieves a list of offers put in a descending order by buyNow price. Within a
+  specific buyNow price, older offers are presented as first.
 
 ## Wrap collection in object
 
-Always return root element as an object. This way you can add extra `metadata` fields to the response without compatibility breakdown.
+Always return root element as an object. This way you can add extra `metadata` fields to the response without
+compatibility breakdown.
 
-For example, in the case of the `offers` collection, you can add a metadata field such as `count` containing a number of matching offers:
+For example, in the case of the `offers` collection, you can add a metadata field such as `count` containing a number of
+matching offers:
 
 ```json
 {
-    "offers": [
-        {
-            "id": "01234567-89ab-cdef-0123-456789abcdef",
-            "name": "PINK FLOYD: THE ENDLESS RIVER"
-        },
-        {
-            "id": "11234567-89ab-cdef-0123-456789abcdef",
-            "name": "Ufomammut - Eve"
-        }
-    ],
-    "count": 4674
+  "offers": [
+    {
+      "id": "01234567-89ab-cdef-0123-456789abcdef",
+      "name": "PINK FLOYD: THE ENDLESS RIVER"
+    },
+    {
+      "id": "11234567-89ab-cdef-0123-456789abcdef",
+      "name": "Ufomammut - Eve"
+    }
+  ],
+  "count": 4674
 }
 ```
 
@@ -1095,14 +1238,14 @@ When a collection is in the root, you cannot add extra field there.
 
 ```json
 [
-    {
-        "id": "01234567-89ab-cdef-0123-456789abcdef",
-        "name": "PINK FLOYD: THE ENDLESS RIVER"
-    },
-    {
-        "id": "11234567-89ab-cdef-0123-456789abcdef",
-        "name": "Ufomammut - Eve"
-    }
+  {
+    "id": "01234567-89ab-cdef-0123-456789abcdef",
+    "name": "PINK FLOYD: THE ENDLESS RIVER"
+  },
+  {
+    "id": "11234567-89ab-cdef-0123-456789abcdef",
+    "name": "Ufomammut - Eve"
+  }
 ]
 ```
 
@@ -1119,7 +1262,8 @@ GET /offers?offset=100&limit=500
 
 ## Keep response gziped
 
-All responses should be gziped based on the client `Accept-Encoding: gzip` header and return information about used encode method in the `Content-Encoding: gzip` header.
+All responses should be gziped based on the client `Accept-Encoding: gzip` header and return information about used
+encode method in the `Content-Encoding: gzip` header.
 
 # Error
 
@@ -1131,7 +1275,8 @@ services, it provides a mechanism to trace, diagnose and debug requests.
 
 ## Generate structured errors
 
-A client sets the requested `Accept-Language` header ([RFC code](http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)) to get a localized userMessage (see [Translations](#translations) for more info):
+A client sets the requested `Accept-Language` header ([RFC code](http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes))
+to get a localized userMessage (see [Translations](#translations) for more info):
 
 ```
 Accept-Language: ru-UA
@@ -1143,18 +1288,17 @@ In case of an error response, the client gets:
 HTTP/1.1 422 Unprocessable Entity
 ```
 
-
 ```json
 {
-	"errors": [
-	    {
-	        "message": "Delivery point data not passed",
-	        "code": "MissingDeliveryPointException",
-	        "details": "Exception was thrown from https://api.allegro.pl/points/1 in line 2",
-	        "path": "Endpoint.getDeliveries.arg1",
-	        "userMessage": "Nie wybrano punktu dla odbioru osobistego."
-	    }
-    ]
+  "errors": [
+    {
+      "message": "Delivery point data not passed",
+      "code": "MissingDeliveryPointException",
+      "details": "Exception was thrown from https://api.allegro.pl/points/1 in line 2",
+      "path": "Endpoint.getDeliveries.arg1",
+      "userMessage": "Nie wybrano punktu dla odbioru osobistego."
+    }
+  ]
 }
 ```
 
@@ -1164,21 +1308,25 @@ Generate consistent, structured response bodies concerning errors.
 * code - error code in a string representation; it can be an exception name e.g. `MissingDeliveryPointException`,
 * details - more specific message for an internal developer; it will be null in case of a production environment,
 * path - information about failed parameters validation; can be null,
-* userMessage - localized message (based on `Accept-Language` header) to be presented to an application user (much more general than a message);
-this field is mandatory.
+* userMessage - localized message (based on `Accept-Language` header) to be presented to an application user (much more
+  general than a message);
+  this field is mandatory.
 
 A developer can use `Trace-Id` header from a response to determine the exact flow for a given error in micro-services.
-
 
 # Command pattern
 
 ## Problem
 
-Mapping CRUD operations to semantics of HTTP `POST`, `PUT`, `DELETE` is easy. However that is not the case for more complex operations that do more
-than simply send the new state of a single resource. An example of such operations is the renewal of offers on Allegro -  the operation requires some input data
-and modifies lots of fields in the given offer causing business changes in many integrated services (settlement, fraud monitoring, etc.).
+Mapping CRUD operations to semantics of HTTP `POST`, `PUT`, `DELETE` is easy. However that is not the case for more
+complex operations that do more
+than simply send the new state of a single resource. An example of such operations is the renewal of offers on Allegro -
+the operation requires some input data
+and modifies lots of fields in the given offer causing business changes in many integrated services (settlement, fraud
+monitoring, etc.).
 
-How to model this type of a non-trivial operation in REST? It can be a change caused by updating the offers status as presented below:
+How to model this type of a non-trivial operation in REST? It can be a change caused by updating the offers status as
+presented below:
 
 ```bash
 curl -X PUT https://api.allegro.pl/offers/6546456 -H "Content-Type: application/vnd.allegro.public.v1+json" -d
@@ -1218,9 +1366,12 @@ All the above problems can be solved by using the command pattern that gives you
 * a standard mechanism to trace the status of asynchronous operations,
 * an idempotent way to execute this operation.
 
-To implement this pattern add a sub-resource with commands to your business resource, for example: `/offers/{offerId}/{command-type}-commands`.
-In this example if you want to execute a complex operation on an offer add the operation input data to the appropriate commands collection.
-But do not use `POST` to do it as `POST` is not idempotent in REST – use the `PUT` method and an UUID generated by the client.
+To implement this pattern add a sub-resource with commands to your business resource, for
+example: `/offers/{offerId}/{command-type}-commands`.
+In this example if you want to execute a complex operation on an offer add the operation input data to the appropriate
+commands collection.
+But do not use `POST` to do it as `POST` is not idempotent in REST – use the `PUT` method and an UUID generated by the
+client.
 
 ### Adding the command
 
@@ -1233,7 +1384,8 @@ curl -X PUT https://api.allegro.pl/offers/6546456/renew-commands/23453425-342532
 }
 ```
 
-Although many developers are used to apply PUT method only for updates, you must be aware that the semantics of this method is much wider according to the HTTP RFC.
+Although many developers are used to apply PUT method only for updates, you must be aware that the semantics of this
+method is much wider according to the HTTP RFC.
 See [RFC 7231](http://tools.ietf.org/html/rfc7231#section-4.3.4) for more details.
 
 Sample response:
@@ -1261,11 +1413,18 @@ curl -X GET https://api.allegro.pl/offers/6546456/renew-commands/23453425-342532
 Response:
 
 ```javascript
-200 Ok
+200
+Ok
 {
-    "status" : "SUCCESSFUL",
-    "fromDate" : "2015-08-30T17:00:00.000Z",
-    "duration" : "P7D",
+    "status"
+:
+    "SUCCESSFUL",
+        "fromDate"
+:
+    "2015-08-30T17:00:00.000Z",
+        "duration"
+:
+    "P7D",
     // other output data given to this command
 }
 ```
@@ -1273,13 +1432,22 @@ Response:
 or if the execution of the command failed:
 
 ```javascript
-200 Ok
+200
+Ok
 {
-    "status" : "FAILED",
-    "fromDate" : "2015-08-30T17:00:00.000Z",
-    "duration" : "P7D",
-    // other output data given to this command
-    "errors" : [
+    "status"
+:
+    "FAILED",
+        "fromDate"
+:
+    "2015-08-30T17:00:00.000Z",
+        "duration"
+:
+    "P7D",
+        // other output data given to this command
+        "errors"
+:
+    [
         // errors description
     ]
 }
@@ -1291,33 +1459,43 @@ Developers will decide which mechanism they prefer.
 ## Antypatterns replaced by this pattern
 
 * POST-based command pattern that submits commands directly to a resource such as e.g. `/offers/546534534`
-	* according to the RFC, the `POST` method is for not idempotent operations
-	* no guarantee on the API level that the business logic will be executed only once
+    * according to the RFC, the `POST` method is for not idempotent operations
+    * no guarantee on the API level that the business logic will be executed only once
 * sending command UUID's in a header
-	* this pattern is incompatible with REST and the HTTP RFC which states that non-standard headers are deprecated
-	* does not solve all the problems that the PUT and UUID in URI pattern solves
+    * this pattern is incompatible with REST and the HTTP RFC which states that non-standard headers are deprecated
+    * does not solve all the problems that the PUT and UUID in URI pattern solves
 
 # Documentation
 
-Each resource method (`GET`, `POST`, `PUT`, `DELETE`, `PATCH`) has to provide brief documentation for itself. There should be a description
-of what given resource is responsible for and how a client interprets it. This documentation should contain information on expected input
+Each resource method (`GET`, `POST`, `PUT`, `DELETE`, `PATCH`) has to provide brief documentation for itself. There
+should be a description
+of what given resource is responsible for and how a client interprets it. This documentation should contain information
+on expected input
 parameters (`GET`) or body (`POST`, `PUT`, `PATCH`), required and optional parameters, the response a client should
-expect and possible error codes. Documentation should be compatible with [swagger spec 2.0](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md)
+expect and possible error codes. Documentation should be compatible
+with [swagger spec 2.0](https://github.com/swagger-api/swagger-spec/blob/master/versions/2.0.md)
 and should be accessible under a well-known endpoint (e.g. service-host/swagger.json).
-
 
 # Glossary
 
-The main goal of the glossary is to unify terms used by public resources in order to give a clear understanding of the Allegro REST API
-and to make the integration with Allegro smooth. Below terms should be used in resource’s names, models, objects, query parameters, etc.
-The glossary is divided into several sections, each of them represents a specific area of Allegro domain or specific technological aspect (e.g. how to represent a user).
+The main goal of the glossary is to unify terms used by public resources in order to give a clear understanding of the
+Allegro REST API
+and to make the integration with Allegro smooth. Below terms should be used in resource’s names, models, objects, query
+parameters, etc.
+The glossary is divided into several sections, each of them represents a specific area of Allegro domain or specific
+technological aspect (e.g. how to represent a user).
 
-The main goal of the glossary is to unify terms of all our public resources in order to give a clear understanding of the Allegro REST API
-and to help our clients seamlessly integrate with the Allegro. Below terms should be used in our **resources' names, models, JSON objects, query parameters** etc.
-The glossary was divided into several sections, each of them represents some area of Allegro domain or specific technological aspect (e.g. how to represent a user).
-You are invited to contribute the glossary, especially when you are responsible for some area in Allegro, just create a pull-request.
+The main goal of the glossary is to unify terms of all our public resources in order to give a clear understanding of
+the Allegro REST API
+and to help our clients seamlessly integrate with the Allegro. Below terms should be used in our **resources' names,
+models, JSON objects, query parameters** etc.
+The glossary was divided into several sections, each of them represents some area of Allegro domain or specific
+technological aspect (e.g. how to represent a user).
+You are invited to contribute the glossary, especially when you are responsible for some area in Allegro, just create a
+pull-request.
 
 ## General
+
 * **id** - entity's identifier (i.e. offer, category)
 * **name** - used to store name of an entity (i.e. offer, category)
 * **dryRun** - should a function run without any modification of data?
@@ -1325,10 +1503,13 @@ You are invited to contribute the glossary, especially when you are responsible 
 * **inactive** - is the entity inactive?
 * **version** - version of an entity or a system
 * **count** - number of matched entities (e.g. in case of pagination), used mainly for pagination
-where it should tell how many entities matched the clients criteria, NOT how many entities were returned on the given page
-* **language** - according to language tag (https://tools.ietf.org/html/bcp47, https://en.wikipedia.org/wiki/IETF_language_tag)
+  where it should tell how many entities matched the clients criteria, NOT how many entities were returned on the given
+  page
+* **language** - according to language tag (https://tools.ietf.org/html/bcp47
+  , https://en.wikipedia.org/wiki/IETF_language_tag)
 
 ## Address
+
 * **address**
 * **street**
 * **city**
@@ -1337,52 +1518,56 @@ where it should tell how many entities matched the clients criteria, NOT how man
 * **countryCode**
 
 ## Image
+
 * **image** - keep in mind that we do not use **~~picture~~**
 * **url** - image url
 * **title** - image title
 
 ```json
 {
-    "image": {
-        "url": "",
-        "title": ""
-    }
+  "image": {
+    "url": "",
+    "title": ""
+  }
 }
 ```
 
 ## Description
+
 * **description**
 * **summary** - brief text summary
 * **text** - full text description
 
 ```json
 {
-    "description": {
-        "summary": "",
-        "text": ""
-    }
+  "description": {
+    "summary": "",
+    "text": ""
+  }
 }
 ```
 
 ## Category
+
 * **parent** - category parent
 * **leaf** - is the category a leaf?
 * **tree** - to which category tree it belongs to?
 
 ```json
 {
-    "category": {
-        "id": "...",
-        "name": "...",
-        "leaf": true,
-        "tree": {
-            "name": "sample-tree"
-        }
+  "category": {
+    "id": "...",
+    "name": "...",
+    "leaf": true,
+    "tree": {
+      "name": "sample-tree"
     }
+  }
 }
 ```
 
 ## User
+
 * **user** - Allegro user entity
 * **password** - user's password
 * **firstName**
@@ -1396,24 +1581,27 @@ where it should tell how many entities matched the clients criteria, NOT how man
 * **registration**
 
 ## Coordinates
+
 * **coordinates** - map coordinates
 * **lat** - latitude
 * **lon** - longitude
 
 ```json
 {
-    "coordinates": {
-        "lat": 52.33374,
-        "lon": 16.808437
-    }
+  "coordinates": {
+    "lat": 52.33374,
+    "lon": 16.808437
+  }
 }
 ```
 
 ## Pagination
+
 * **offset** - page index (do not use page, pageIndex, etc.)
 * **limit** - page size (do not use pageSize, size, length, etc.)
 
 ## Try to avoid
+
 * **metadata** - do not use it. Almost all information from this object could be moved to parent entity
 * **picture** - use **image** instead
 * **page**, **pageIndex**, **pageNo**, **pageNumber** - do not use them; in case of pagination use `offset` instead
@@ -1431,7 +1619,8 @@ plus all the relations between resources must be a complete URL that uniquely de
 Although the web generally works on HATEOAS type principles (where we go to a website's
 front page and follow links based on what we see on the page), **we are not ready for HATEOAS on APIs just yet.**
 When browsing a website, decisions on what links will be clicked are made at run time.
-**However, with an API, decisions as to what requests will be sent are made when the API integration code is written, not at run time.**
+**However, with an API, decisions as to what requests will be sent are made when the API integration code is written,
+not at run time.**
 Moreover the entire logic of mobile applications which are the main clients for the API
 should be rewritten either by including URIs in domain model objects to be passed to controllers
 or by changing the contracts of the controllers to include the URIs as well as objects.
