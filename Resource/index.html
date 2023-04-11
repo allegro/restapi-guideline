@@ -15,7 +15,7 @@
         <link rel="next" href="../Representation/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.5">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.6">
     
     
       
@@ -23,7 +23,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.7a7fce14.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ded33207.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.a0c5b2b5.min.css">
@@ -279,29 +279,16 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#beta-resources" class="md-nav__link">
-    Beta resources
+  <a href="#versioning" class="md-nav__link">
+    Versioning
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#versioning" class="md-nav__link">
-    Versioning
+  <a href="#beta-resources" class="md-nav__link">
+    Beta resources
   </a>
-  
-    <nav class="md-nav" aria-label="Versioning">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#beta-version" class="md-nav__link">
-    Beta version
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -574,29 +561,16 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#beta-resources" class="md-nav__link">
-    Beta resources
+  <a href="#versioning" class="md-nav__link">
+    Versioning
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#versioning" class="md-nav__link">
-    Versioning
+  <a href="#beta-resources" class="md-nav__link">
+    Beta resources
   </a>
-  
-    <nav class="md-nav" aria-label="Versioning">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#beta-version" class="md-nav__link">
-    Beta version
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -768,21 +742,7 @@ case above where shipping belongs to an offer:</p>
 /offers/{offerId}/shipments
 /shipments/{shipmentId}
 </code></pre>
-<h2 id="beta-resources">Beta resources</h2>
-<p>Beta version of API resources is aimed at helping developers get familiar with it before realising a new API version.
-Beta version resources can change continuously and affect compatibility of current API.</p>
-<p>Beta resources rules:</p>
-<ul>
-<li>Numbers added to beta version resources are +1 compared to the numbers of current resources.
-Moreover, “public” is replaced with “beta”, e.g. if resources or users are marked as application/vnd.allegro.public.v1+json,
-then in beta version the same resources will be marked as application/vnd.allegro.beta.v2+json,</li>
-<li>Within a given version, beta resources can be subject to modifications. As a result, we do not recommend the production use of beta resources,</li>
-<li>When completing a beta resource , enter it into the API with a suitable beta number, e.g. if you complete your work,
-resources or users marked as application/vnd.allegro.beta.v2+json will be entered into the API as application/vnd.allegro.public.v2+json.</li>
-</ul>
 <h2 id="versioning">Versioning</h2>
-<p>To prevent unexpected, breaking changes to users, ask for providing a suitable version in all the requests.</p>
-<p><strong>Avoid default versions as it can change in the future.</strong></p>
 <p>To specify version use custom media type and <a href="https://tools.ietf.org/html/rfc6839#page-4">+json Structured Syntax Suffix</a> i.e. <code>application/vnd.allegro.public.v1+json</code>.
 Each request must specify its version by setting up <code>Accept</code> or <code>Content-type</code> properly.
 The header depends on method semantics e.g.: GET methods usually expect <code>Accept</code> header, POST methods usually expect<code>Content-type</code> header and PUT methods usually expect both headers.</p>
@@ -794,11 +754,20 @@ Accept: application/vnd.allegro.public.v1+json
 @Produces(&quot;application/vnd.allegro.public.v1+json&quot;)
 
 </code></pre>
-<h3 id="beta-version">Beta version</h3>
+<p>We don't introduce new API versions, all changes also those that are breaking would be introduced under already existing version, marked as <code>application/vnd.allegro.public.v1+json</code>.</p>
+<p>Instead of API versioning, we have the procedures to handle new changes depending on their type.
+The context, decision, and types of changes and how we handle them are described in document <a href="https://github.com/allegro/restapi-guideline/blob/master/adr/ADR-001-public-api-is-not-versioned.md">ADR-001: Public API is not versioned</a>.</p>
+<h2 id="beta-resources">Beta resources</h2>
+<p>Beta version of API resources is aimed at helping developers get familiar with it before releasing a new API resource. Beta version resources can change continuously and affect compatibility of current API.</p>
 <p>Beta version resources are marked the same way as described above, but “public” is replaced with “beta” in a media type, e.g. <code>application/vnd.allegro.beta.v1+json</code>.</p>
 <pre><code>Content-Type: application/vnd.allegro.beta.v1+json
 Accept: application/vnd.allegro.beta.v1+json
 </code></pre>
+<p>Rules for new beta resources:
+* within a given version, beta resources can be subject to modifications. As a result, we do not recommend the production use of beta resources,
+* breaking changes within the beta version can be implemented within subsequent versions and marked, for example, as <code>application/vnd.allegro.beta.v2+json</code>,
+* if you complete your work with the beta version, release it as <code>application/vnd.allegro.public.v1+json</code>.</p>
+<p>Beta version marked as <code>application/vnd.allegro.beta.v1+json</code> can be used in exceptional situations to implement compatibility-breaking changes to resources that have already been released in the version marked as <code>application/vnd.allegro.public.v1+json</code>. Read more on that in <a href="https://github.com/allegro/restapi-guideline/blob/master/adr/ADR-001-public-api-is-not-versioned.md">ADR-001: Public API is not versioned</a>.</p>
 <h2 id="views">Views</h2>
 <p>If you need different views of the same object, construct different URLs to distinguish views.</p>
 <p>For example: some offer data are available only for seller. To get these private data, add context <em>/sale/</em> to the path:</p>
@@ -1070,7 +1039,7 @@ Sample error validation response:</p>
     <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.407015b8.min.js"></script>
+      <script src="../assets/javascripts/bundle.51198bba.min.js"></script>
       
     
   </body>
