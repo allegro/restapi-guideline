@@ -100,9 +100,8 @@ that add value to the API owner’s business.
 	* [Identification (UU)IDs](#identification-uuids)
 	* [Lowercase paths](#lowercase-paths)
 	* [Minimize resources nesting](#minimize-resources-nesting)
-	* [Beta resources](#beta-resources)
 	* [Versioning](#versioning)
-		* [Beta version](#beta-version)
+	* [Beta resources](#beta-resources)
 	* [Views](#views)
 	* [User Agent Header](#user-agent-header)
 		* [Identifying your client](#identifying-your-client)
@@ -220,25 +219,7 @@ case above where shipping belongs to an offer:
 /shipments/{shipmentId}
 ```
 
-## Beta resources
-
-Beta version of API resources is aimed at helping developers get familiar with it before realising a new API version.
-Beta version resources can change continuously and affect compatibility of current API.
-
-Beta resources rules:
-
-* Numbers added to beta version resources are +1 compared to the numbers of current resources.
-Moreover, “public” is replaced with “beta”, e.g. if resources or users are marked as application/vnd.allegro.public.v1+json,
-then in beta version the same resources will be marked as application/vnd.allegro.beta.v2+json,
-* Within a given version, beta resources can be subject to modifications. As a result, we do not recommend the production use of beta resources,
-* When completing a beta resource , enter it into the API with a suitable beta number, e.g. if you complete your work,
-resources or users marked as application/vnd.allegro.beta.v2+json will be entered into the API as application/vnd.allegro.public.v2+json.
-
 ## Versioning
-
-To prevent unexpected, breaking changes to users, ask for providing a suitable version in all the requests.
-
-**Avoid default versions as it can change in the future.**
 
 To specify version use custom media type and [+json Structured Syntax Suffix](https://tools.ietf.org/html/rfc6839#page-4) i.e. `application/vnd.allegro.public.v1+json`.
 Each request must specify its version by setting up `Accept` or `Content-type` properly.
@@ -257,7 +238,14 @@ With jersey you can simply use:
 
 ```
 
-### Beta version
+We don't introduce new API versions, all changes also those that are breaking would be introduced under already existing version, marked as `application/vnd.allegro.public.v1+json`.
+
+Instead of API versioning, we have the procedures to handle new changes depending on their type.
+The context, decision, and types of changes and how we handle them are described in document [ADR-001: Public API is not versioned](https://github.com/allegro/restapi-guideline/blob/master/adr/ADR-001-public-api-is-not-versioned.md).
+
+## Beta resources
+
+Beta version of API resources is aimed at helping developers get familiar with it before releasing a new API resource. Beta version resources can change continuously and affect compatibility of current API.
 
 Beta version resources are marked the same way as described above, but “public” is replaced with “beta” in a media type, e.g. `application/vnd.allegro.beta.v1+json`.
 
@@ -265,6 +253,13 @@ Beta version resources are marked the same way as described above, but “public
 Content-Type: application/vnd.allegro.beta.v1+json
 Accept: application/vnd.allegro.beta.v1+json
 ```
+
+Rules for new beta resources:
+* within a given version, beta resources can be subject to modifications. As a result, we do not recommend the production use of beta resources,
+* breaking changes within the beta version can be implemented within subsequent versions and marked, for example, as `application/vnd.allegro.beta.v2+json`,
+* if you complete your work with the beta version, release it as `application/vnd.allegro.public.v1+json`.
+
+Beta version marked as `application/vnd.allegro.beta.v1+json` can be used in exceptional situations to implement compatibility-breaking changes to resources that have already been released in the version marked as `application/vnd.allegro.public.v1+json`. Read more on that in [ADR-001: Public API is not versioned](https://github.com/allegro/restapi-guideline/blob/master/adr/ADR-001-public-api-is-not-versioned.md).
 
 ## Views
 
