@@ -199,7 +199,6 @@ In response body we are receiving list of performed modifications.
 4. (Optionally) Request has `id` attribute to assure idempotency
 5. Response returns operation `id`
 6. Response from status check has no fixed structure
-7. (Optionally) Response has operation id
 
 #### Example
 
