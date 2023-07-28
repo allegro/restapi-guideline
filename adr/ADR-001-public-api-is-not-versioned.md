@@ -6,7 +6,7 @@ ACCEPTED
 
 ## Context
 
-Versioning of complex API which additionally has a dynamic development proces is hard and brings a lot of challenges.
+Versioning of complex API which additionally has a dynamic development process is hard and brings a lot of challenges.
 Based on our experience we observed following problems with API versioning:
 
 - Growth of API complexity
