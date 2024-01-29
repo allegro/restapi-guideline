@@ -317,6 +317,7 @@ Return suitable codes to provide additional information in case of errors:
 * `405 Method Not Allowed`: Requested HTTP method is not available for a given resource
 * `406 Not Acceptable`: Missing or incorrect `Accept` header was provided as part of the request
 * `410 Gone`: Indicates that the resource is no longer available. Useful as a blanket response for old API resource versions
+* `414 URI Too Long`: Indicates that the URI requested by the client is longer than the server is willing to interpret
 * `415 Unsupported Media Type`: If incorrect `Content-type` header was provided as part of the request
 * `422 Unprocessable Entity`: Used for validation errors – request was understood, but contained invalid parameters
 * `429 Too Many Requests`: When a request is rejected due to rate limiting
